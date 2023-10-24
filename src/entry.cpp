@@ -1,0 +1,31 @@
+#include <et/entry.hpp>
+
+int ET_API main(int argc, char const *argv[]) {
+	using namespace EngineThingy;
+	auto &app = Application::Init({ argv, argv + argc });
+	app.RegisterSystem<LogSystem>();
+	LogSystem::Instance().CoreInfo("Log System initialized");
+	app.Run();
+	return 0;
+}
+
+namespace EngineThingy {
+	using AppArgs_t = libstra::array_view<const char *>;
+	Application::Application(AppArgs_t args) : _args(args) {}
+
+	Application &Application::Init(AppArgs_t args) {
+		assert(!_instance);
+		auto *app = new Application(args);
+		return *(_instance = std::unique_ptr<Application>(app));
+	}
+	Application &Application::Instance() {
+		assert(_instance);
+		return *_instance;
+	}
+	void Application::Run() {
+		while (_run)
+			;
+	}
+	std::unique_ptr<Application> Application::_instance = nullptr;
+	Application::~Application() {}
+} // namespace EngineThingy

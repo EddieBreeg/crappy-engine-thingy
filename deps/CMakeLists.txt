@@ -1,0 +1,2 @@
+add_subdirectory(libstra)
+add_subdirectory(spdlog)

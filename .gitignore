@@ -1,0 +1,9 @@
+**build/
+**bin/
+**lib/
+
+*.dll
+*.lib
+*.so
+*.a
+*.zip
