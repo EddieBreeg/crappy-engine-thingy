@@ -10,6 +10,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 option(BUILD_SHARED_LIBS "Wether to link the engine in a shared library" ON)
+option(BUILD_TESTING "Build test programs" OFF)
 
 if(NOT ${BUILD_SHARED_LIBS})
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
