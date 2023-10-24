@@ -61,4 +61,18 @@ namespace EngineThingy {
 	template <class F, class... Args>
 	using invoke_t = decltype(std::declval<F>()(std::declval<Args>()...));
 
+	namespace _impl {
+		template <class T, class = void>
+		struct is_dereferenceable : std::false_type {};
+
+		template <class T>
+		struct is_dereferenceable<T, std::void_t<libstra::dereference_t<T>>>
+			: std::true_type {};
+
+	} // namespace _impl
+
+	template <class T>
+	static constexpr bool is_dereferenceable_v =
+		_impl::is_dereferenceable<T>::value;
+
 } // namespace EngineThingy
