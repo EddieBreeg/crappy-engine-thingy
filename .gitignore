@@ -7,3 +7,5 @@
 *.so
 *.a
 *.zip
+
+.vscode/
