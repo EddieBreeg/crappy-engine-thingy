@@ -14,13 +14,9 @@ namespace EngineThingy {
 	Application::Application(AppArgs_t args) : _args(args) {}
 
 	Application &Application::Init(AppArgs_t args) {
-		assert(!_instance);
+		ET_ENSURE(!_instance);
 		auto *app = new Application(args);
 		return *(_instance = std::unique_ptr<Application>(app));
-	}
-	Application &Application::Instance() {
-		assert(_instance);
-		return *_instance;
 	}
 	void Application::Run() {
 		_startTime = Clock::now();
@@ -37,6 +33,5 @@ namespace EngineThingy {
 			sys.Update(delta);
 	}
 
-	std::unique_ptr<Application> Application::_instance = nullptr;
 	Application::~Application() {}
 } // namespace EngineThingy

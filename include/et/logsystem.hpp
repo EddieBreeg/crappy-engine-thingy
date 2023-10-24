@@ -6,7 +6,7 @@
 
 namespace EngineThingy {
 
-	class LogSystem : public Singleton<LogSystem *> {
+	class ET_API LogSystem : public Singleton<LogSystem *> {
 		LogSystem(spdlog::level::level_enum level);
 		std::shared_ptr<spdlog::logger> _coreLogger, _clientLogger;
 
