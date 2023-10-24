@@ -4,7 +4,7 @@ int ET_API main(int argc, char const *argv[]) {
 	using namespace EngineThingy;
 	auto &app = Application::Init({ argv, argv + argc });
 	app.RegisterSystem<LogSystem>();
-	LogSystem::Instance().CoreInfo("Log System initialized");
+	ET_CORE_LOG_INFO("Log system initialized");
 	app.Run();
 	return 0;
 }
@@ -23,9 +23,20 @@ namespace EngineThingy {
 		return *_instance;
 	}
 	void Application::Run() {
-		while (_run)
-			;
+		_startTime = Clock::now();
+		TimePoint t;
+		Timing delta{ 0 };
+		while (_run) {
+			t = Clock::now();
+			Update(delta);
+			delta = Clock::now() - t;
+		}
 	}
+	void Application::Update(Timing delta) {
+		for (const SystemInstance &sys : _systems)
+			sys.Update(delta);
+	}
+
 	std::unique_ptr<Application> Application::_instance = nullptr;
 	Application::~Application() {}
 } // namespace EngineThingy

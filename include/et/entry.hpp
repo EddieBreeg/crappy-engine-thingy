@@ -12,6 +12,7 @@ namespace EngineThingy {
 		static std::unique_ptr<Application> _instance;
 		std::vector<SystemInstance> _systems;
 		bool _run = true;
+		TimePoint _startTime;
 
 		void Update(Timing delta);
 

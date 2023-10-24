@@ -48,7 +48,7 @@
 namespace EngineThingy {
 	namespace chrono = std::chrono;
 	using Clock = chrono::steady_clock;
-	using Timing = chrono::seconds;
+	using Timing = chrono::duration<double>;
 	using TimePoint = Clock::time_point;
 
 } // namespace EngineThingy
