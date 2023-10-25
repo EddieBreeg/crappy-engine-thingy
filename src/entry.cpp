@@ -1,4 +1,5 @@
 #include <et/entry.hpp>
+#include <et/rng.hpp>
 
 int ET_API main(int argc, char const *argv[]) {
 	using namespace EngineThingy;
@@ -11,7 +12,9 @@ int ET_API main(int argc, char const *argv[]) {
 
 namespace EngineThingy {
 	using AppArgs_t = libstra::array_view<const char *>;
-	Application::Application(AppArgs_t args) : _args(args) {}
+	Application::Application(AppArgs_t args) : _args(args) {
+		RNG::Init();
+	}
 
 	Application &Application::Init(AppArgs_t args) {
 		ET_ENSURE(!_instance);

@@ -3,6 +3,8 @@
 #include <utility>
 #include <memory>
 #include <cassert>
+#include <cstddef>
+#include <cinttypes>
 #include <string_view>
 
 #if defined(_WIN32)

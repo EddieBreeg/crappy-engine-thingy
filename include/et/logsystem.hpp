@@ -15,15 +15,40 @@ namespace EngineThingy {
 		static LogSystem &Init();
 
 #ifdef ET_BUILD
-		void CoreInfo(std::string_view message);
-		void CoreWarn(std::string_view message);
-		void CoreError(std::string_view message);
-		void CoreFatal(std::string_view message);
+
+		template <class Msg>
+		void CoreInfo(Msg &&message) {
+			_coreLogger->info(std::forward<Msg>(message));
+		}
+		template <class Msg>
+		void CoreWarn(Msg &&message) {
+			_coreLogger->warn(std::forward<Msg>(message));
+		}
+		template <class Msg>
+		void CoreError(Msg &&message) {
+			_coreLogger->error(std::forward<Msg>(message));
+		}
+		template <class Msg>
+		void CoreFatal(Msg &&message) {
+			_coreLogger->critical(std::forward<Msg>(message));
+		}
 #endif
-		void ClientInfo(std::string_view message);
-		void ClientWarn(std::string_view message);
-		void ClientError(std::string_view message);
-		void ClientFatal(std::string_view message);
+		template <class Msg>
+		void ClientInfo(Msg &&message) {
+			_clientLogger->info(std::forward<Msg>(message));
+		}
+		template <class Msg>
+		void ClientWarn(Msg &&message) {
+			_clientLogger->warn(std::forward<Msg>(message));
+		}
+		template <class Msg>
+		void ClientError(Msg &&message) {
+			_clientLogger->error(std::forward<Msg>(message));
+		}
+		template <class Msg>
+		void ClientFatal(Msg &&message) {
+			_clientLogger->critical(std::forward<Msg>(message));
+		}
 
 		~LogSystem();
 	};

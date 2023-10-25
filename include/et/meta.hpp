@@ -50,6 +50,8 @@ namespace EngineThingy {
 				std::enable_if_t<
 					!std::is_default_constructible_v<T> &&
 					!std::is_constructible_v<T, Args...> &&
+					!std::is_copy_constructible_v<T> &&
+					!std::is_copy_assignable_v<T> &&
 					std::is_same_v<T &, remove_cv_t<decltype(T::Instance())>>>>>
 			: std::true_type {};
 	} // namespace _impl

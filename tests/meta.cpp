@@ -13,6 +13,8 @@ public:
 		obj.x = x;
 		_instance = &obj;
 	}
+	S(const S &) = delete;
+	S &operator=(const S &) = delete;
 	static S &Instance() { return *_instance; }
 	operator int() const { return x; }
 
