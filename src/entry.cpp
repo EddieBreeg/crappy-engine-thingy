@@ -1,12 +1,23 @@
 #include <et/entry.hpp>
 #include <et/rng.hpp>
 #include <et/events/application.hpp>
+#include <csignal>
+
+#ifdef ET_CONSOLE_MODE
+void interrupt_handler(int) {
+	EngineThingy::EventSystem::Instance().EnqueueEvent(
+		std::make_unique<EngineThingy::ApplicationQuitEvent>());
+}
+#endif
 
 int ET_API main(int argc, char const *argv[]) {
 	using namespace EngineThingy;
 	auto &app = Application::Init({ argv, argv + argc });
 	app.RegisterSystems<LogSystem, EventSystem>();
 	ET_CORE_LOG_INFO("All major systems initialized");
+#ifdef ET_CONSOLE_MODE
+	std::signal(SIGINT, interrupt_handler);
+#endif
 	app.Run();
 	return 0;
 }
@@ -30,6 +41,13 @@ namespace EngineThingy {
 				ET_CORE_LOG_INFO("Application start event received");
 			});
 		eventSystem.EnqueueEvent(std::make_unique<ApplicationStartEvent>());
+
+		eventSystem.AddListener<ApplicationQuitEvent>(
+			[this](const ApplicationQuitEvent &) {
+				ET_CORE_LOG_INFO("Received application quit event");
+				this->Stop();
+			});
+
 		TimePoint t;
 		Timing delta{ 0 };
 		while (_run) {

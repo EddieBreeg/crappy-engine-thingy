@@ -8,5 +8,10 @@ namespace EngineThingy {
 		ApplicationStartEvent() = default;
 		ET_EVENT_CLASS(EventType::ApplicationStart, EventCategory::Application);
 	};
+	class ApplicationQuitEvent : public Event {
+	public:
+		ApplicationQuitEvent() = default;
+		ET_EVENT_CLASS(EventType::ApplicationQuit, EventCategory::Application);
+	};
 
 } // namespace EngineThingy

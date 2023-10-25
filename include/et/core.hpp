@@ -1,17 +1,6 @@
 #pragma once
 
-#include <utility>
-#include <memory>
-#include <cassert>
-#include <cstddef>
-#include <cinttypes>
-#include <string_view>
-#include <array>
-#include <string>
-#include <libstra/unique_function.hpp>
-#include <unordered_map>
-#include <type_traits>
-#include <new>
+#include "pch.h"
 
 #if defined(_WIN32)
 #define ET_WINDOWS

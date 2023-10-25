@@ -11,6 +11,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 option(BUILD_SHARED_LIBS "Wether to link the engine in a shared library" ON)
 option(BUILD_TESTING "Build test programs" OFF)
+option(CONSOLE_MODE "Build console version" ON)
 
 if(NOT ${BUILD_SHARED_LIBS})
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
@@ -20,18 +21,20 @@ endif(NOT ${BUILD_SHARED_LIBS})
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_precompile_headers(${PROJECT_NAME} PUBLIC include/et/pch.h)
 
-set(PUBLIC_DEFS "")
-set(PRIVATE_DEFS ET_BUILD)
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE ET_BUILD=1)
 
 if(${BUILD_SHARED_LIBS})
-    string(APPEND PUBLIC_DEFS ET_BUILD_SHARED=1)
+target_compile_definitions(${PROJECT_NAME} PUBLIC ET_BUILD_SHARED)
 endif(${BUILD_SHARED_LIBS})
 
-target_compile_definitions(${PROJECT_NAME} 
-    PUBLIC ${PUBLIC_DEFS}
-    PRIVATE ${PRIVATE_DEFS}    
-)
+if(${CONSOLE_MODE})
+target_compile_definitions(${PROJECT_NAME} PUBLIC ET_CONSOLE_MODE)
+endif(${CONSOLE_MODE})
+
+
 
 add_subdirectory(deps)
 target_link_libraries(${PROJECT_NAME} PUBLIC libstra spdlog)
