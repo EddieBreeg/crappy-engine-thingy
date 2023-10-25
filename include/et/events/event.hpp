@@ -26,8 +26,9 @@ namespace EngineThingy {
 		None = 0,
 		Application = BIT(0),
 		Window = BIT(1),
-		Mouse = BIT(2),
-		Keyboard = BIT(3),
+		Input = BIT(2),
+		Mouse = BIT(3),
+		Keyboard = BIT(4),
 	};
 
 	template <EventCategory C>
@@ -74,6 +75,8 @@ namespace EngineThingy {
 		virtual EventCategory GetCategories() const noexcept = 0;
 		[[nodiscard]]
 		virtual const char *GetName() const noexcept = 0;
+
+		virtual operator std::string() const { return GetName(); }
 
 		virtual ~Event() = default;
 	};
