@@ -4,3 +4,6 @@
 [submodule "deps/libstra"]
 	path = deps/libstra
 	url = git@github.com:EddieBreeg/libstra.git
+[submodule "deps/glfw"]
+	path = deps/glfw
+	url = git@github.com:glfw/glfw.git

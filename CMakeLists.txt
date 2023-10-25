@@ -37,7 +37,11 @@ endif(${CONSOLE_MODE})
 
 
 add_subdirectory(deps)
-target_link_libraries(${PROJECT_NAME} PUBLIC libstra spdlog)
+set(GLFW_BUILD_TESTS OFF)
+set(GLFW_BUILD_EXAMPLES OFF)
+target_link_libraries(${PROJECT_NAME} PUBLIC libstra spdlog glfw)
+
+message("Build shared: ${BUILD_SHARED_LIBS}")
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
