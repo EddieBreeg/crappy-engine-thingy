@@ -2,6 +2,7 @@
 #include <libstra/views.hpp>
 #include <vector>
 #include "logsystem.hpp"
+#include <et/events/event_system.hpp>
 
 namespace EngineThingy {
 

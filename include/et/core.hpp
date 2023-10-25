@@ -6,6 +6,12 @@
 #include <cstddef>
 #include <cinttypes>
 #include <string_view>
+#include <array>
+#include <string>
+#include <libstra/unique_function.hpp>
+#include <unordered_map>
+#include <type_traits>
+#include <new>
 
 #if defined(_WIN32)
 #define ET_WINDOWS
@@ -21,16 +27,20 @@
 
 #ifdef _MSC_VER
 #define ET_API __declspec(dllexport)
+#define CLIENT_API __declspec(dllimport)
 #else
 #define ET_API __attribute__((dllexport))
+#define CLIENT_API __attribute__((dllimport))
 #endif
 
 #else
 
 #ifdef _MSC_VER
 #define ET_API __declspec(dllimport)
+#define CLIENT_API __declspec(dllexport)
 #else
 #define ET_API __attribute__((dllimport))
+#define CLIENT_API __attribute__((dllexport))
 #endif
 
 #endif
@@ -38,6 +48,7 @@
 #else
 
 #define ET_API
+#define CLIENT_API
 
 #endif
 
@@ -71,3 +82,6 @@ namespace EngineThingy {
 #else
 #define ET_ENSURE(expr) 0
 #endif
+
+template <class T>
+using heap_ptr = T *;

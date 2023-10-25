@@ -50,3 +50,7 @@ target_link_libraries(meta_tests PRIVATE ${PROJECT_NAME})
 add_executable(evt_tests tests/events.cpp)
 add_test(NAME EventTests COMMAND evt_tests)
 target_link_libraries(evt_tests PRIVATE ${PROJECT_NAME})
+
+add_executable(hash_tests tests/hash.cpp)
+add_test(NAME HashTests COMMAND hash_tests)
+target_link_libraries(hash_tests PRIVATE ${PROJECT_NAME})

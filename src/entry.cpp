@@ -1,11 +1,12 @@
 #include <et/entry.hpp>
 #include <et/rng.hpp>
+#include <et/events/application.hpp>
 
 int ET_API main(int argc, char const *argv[]) {
 	using namespace EngineThingy;
 	auto &app = Application::Init({ argv, argv + argc });
-	app.RegisterSystem<LogSystem>();
-	ET_CORE_LOG_INFO("Log system initialized");
+	app.RegisterSystems<LogSystem, EventSystem>();
+	ET_CORE_LOG_INFO("All major systems initialized");
 	app.Run();
 	return 0;
 }
@@ -23,6 +24,12 @@ namespace EngineThingy {
 	}
 	void Application::Run() {
 		_startTime = Clock::now();
+		auto &eventSystem = EventSystem::Instance();
+		eventSystem.AddListener<ApplicationStartEvent>(
+			[](const ApplicationStartEvent &) {
+				ET_CORE_LOG_INFO("Application start event received");
+			});
+		eventSystem.EnqueueEvent(std::make_unique<ApplicationStartEvent>());
 		TimePoint t;
 		Timing delta{ 0 };
 		while (_run) {
