@@ -17,4 +17,7 @@ int main() {
 	AppQuit q;
 	el(q);
 	assert(x == 1);
+
+	KeyPressedEvent kp(0);
+	assert(kp.HasCategory(EventCategory::Keyboard));
 }

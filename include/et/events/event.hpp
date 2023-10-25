@@ -77,6 +77,10 @@ namespace EngineThingy {
 		virtual const char *GetName() const noexcept = 0;
 
 		virtual operator std::string() const { return GetName(); }
+		[[nodiscard]]
+		bool HasCategory(EventCategory cat) const noexcept {
+			return ENUM_TO_INT(cat) | ENUM_TO_INT(GetCategories());
+		}
 
 		virtual ~Event() = default;
 	};

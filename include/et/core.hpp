@@ -83,5 +83,7 @@ namespace EngineThingy {
 #define ET_ENSURE(expr) 0
 #endif
 
+#define ENUM_TO_INT(e) static_cast<std::underlying_type_t<decltype(e)>>(e)
+
 template <class T>
 using heap_ptr = T *;
