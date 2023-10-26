@@ -82,7 +82,8 @@ namespace EngineThingy {
 		eventSystem.AddListener<KeyPressedEvent>(
 			[](const KeyPressedEvent &evt) {
 				ET_CORE_LOG_TRACE(fmt::format("Key {} pressed (repeat={})",
-											  evt.GetCode(), evt.IsRepeat()));
+											  (int)evt.GetCode(),
+											  evt.IsRepeat()));
 			});
 		TimePoint t;
 		Timing delta{ 0 };

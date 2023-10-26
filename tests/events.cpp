@@ -18,6 +18,6 @@ int main() {
 	el(q);
 	assert(x == 1);
 
-	KeyPressedEvent kp(0);
+	KeyPressedEvent kp(KeyCode::Key0);
 	assert(kp.HasCategory(EventCategory::Keyboard));
 }
