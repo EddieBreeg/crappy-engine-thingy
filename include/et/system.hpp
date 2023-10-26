@@ -1,6 +1,6 @@
 #pragma once
 
-#include "meta.hpp"
+#include "core.hpp"
 
 namespace EngineThingy {
 
