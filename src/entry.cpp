@@ -28,7 +28,7 @@ int ET_API main(int argc, char const *argv[]) {
 	LogSystem::Init();
 	EventSystem::Init();
 	WindowSystem::Init();
-	app.RegisterSystems<EventSystem, WindowSystem, LogSystem>();
+	app.RegisterSystems<EventSystem, WindowSystem>();
 	ET_CORE_LOG_INFO("All major systems initialized");
 #ifdef ET_CONSOLE_MODE
 	std::signal(SIGINT, interrupt_handler);

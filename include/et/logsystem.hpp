@@ -11,7 +11,6 @@ namespace EngineThingy {
 		std::shared_ptr<spdlog::logger> _coreLogger, _clientLogger;
 
 	public:
-		void Update(Timing) const {}
 		static LogSystem &Init();
 		void SetLevel(spdlog::level::level_enum lvl);
 
