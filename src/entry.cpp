@@ -25,7 +25,10 @@ void interrupt_handler(int) {
 int ET_API main(int argc, char const *argv[]) {
 	using namespace EngineThingy;
 	auto &app = Application::Init({ argv, argv + argc });
-	app.RegisterSystems<LogSystem, EventSystem, WindowSystem>();
+	LogSystem::Init();
+	EventSystem::Init();
+	WindowSystem::Init();
+	app.RegisterSystems<EventSystem, WindowSystem, LogSystem>();
 	ET_CORE_LOG_INFO("All major systems initialized");
 #ifdef ET_CONSOLE_MODE
 	std::signal(SIGINT, interrupt_handler);

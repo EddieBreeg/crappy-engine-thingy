@@ -28,7 +28,6 @@ namespace EngineThingy {
 		template <class S>
 		static SystemInstance Create() {
 			static_assert(is_system_type_v<S>, "S is not a valid system class");
-			S::Init();
 			return SystemInstance([](Timing d) { S::Instance().Update(d); });
 		}
 		void Update(Timing delta) const { _updateFunc(delta); }

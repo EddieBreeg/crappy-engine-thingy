@@ -61,7 +61,9 @@ namespace EngineThingy {
 		}
 		glfwSwapBuffers(_win);
 	}
-	void WindowImpl::SetVsync(bool VSync) {}
+	void WindowImpl::SetVsync(bool VSync) {
+		glfwSwapInterval(VSync);
+	}
 	void WindowImpl::SetResizeable(bool r) {}
 
 	std::unique_ptr<Window>
