@@ -24,7 +24,8 @@ namespace EngineThingy {
 	}
 
 	WindowSystem::WindowSystem() {
-		ET_ENSURE(glfwInit());
+		int success = glfwInit();
+		ET_ENSURE(success);
 	}
 	WindowSystem::~WindowSystem() {
 		glfwTerminate();
