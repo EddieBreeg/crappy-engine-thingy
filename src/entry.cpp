@@ -4,6 +4,7 @@
 #include <et/events/window.hpp>
 #include <et/events/keyboard.hpp>
 #include <et/window_system.hpp>
+#include <et/scene_system.hpp>
 #include <csignal>
 
 #if defined(ET_DEBUG) && defined(ET_CONSOLE_MODE)
@@ -30,7 +31,8 @@ int ET_API main(int argc, char const *argv[]) {
 	LogSystem::Init();
 	EventSystem::Init();
 	WindowSystem::Init();
-	app.RegisterSystems<EventSystem, WindowSystem>();
+	SceneSystem::Init();
+	app.RegisterSystems<EventSystem, SceneSystem, WindowSystem>();
 	ET_CORE_LOG_INFO("All major systems initialized");
 #ifdef ET_CONSOLE_MODE
 	std::signal(SIGINT, interrupt_handler);
