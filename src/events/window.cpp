@@ -12,6 +12,12 @@ namespace EngineThingy {
 		   << newSize.first << ", " << newSize.second << ')';
 		return ss.str();
 	}
+	WindowMoveEvent::operator std::string() const {
+		std::stringstream ss;
+		ss << '(' << x << ", " << y << ')';
+		return ss.str();
+	}
+	WindowMoveEvent::WindowMoveEvent(int x, int y) : x(x), y(y) {}
 
 	WindowFocusEvent::WindowFocusEvent(bool f) : focused(f) {}
 	WindowFocusEvent::operator std::string() const {

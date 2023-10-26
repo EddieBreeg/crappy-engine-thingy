@@ -30,4 +30,13 @@ namespace EngineThingy {
 		ET_EVENT_CLASS(EventType::WindowFocus, EventCategory::Window);
 	};
 
+	class ET_API WindowMoveEvent : public Event {
+	public:
+		int x, y;
+
+		WindowMoveEvent(int x, int y);
+		operator std::string() const override;
+		ET_EVENT_CLASS(EventType::WindowMove, EventCategory::Window);
+	};
+
 } // namespace EngineThingy

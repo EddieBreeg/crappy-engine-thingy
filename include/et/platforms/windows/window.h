@@ -10,6 +10,7 @@ namespace EngineThingy {
 	private:
 		GLFWwindow *_win = nullptr;
 		static void sizeCallback(GLFWwindow *, int w, int h);
+		static void moveCallback(GLFWwindow *, int w, int h);
 		static void focusCallback(GLFWwindow *, int focused);
 
 	public:

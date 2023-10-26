@@ -10,9 +10,13 @@ namespace EngineThingy {
 	void WindowImpl::sizeCallback(GLFWwindow *, int w, int h) {
 		WindowImpl &win = (WindowImpl &)WindowSystem::Instance().GetActive();
 		EventSystem::Instance().EnqueueEvent(
-			std::make_unique<WindowResizeEvent>(win.GetSize(),
-												std::pair{ w, h }));
+			std::make_unique<WindowResizeEvent>(
+				win.GetSize(), std::pair<uint32_t, uint32_t>{ w, h }));
 		win._size = std::pair<uint32_t, uint32_t>{ w, h };
+	}
+	void WindowImpl::moveCallback(GLFWwindow *, int x, int y) {
+		EventSystem::Instance().EnqueueEvent(
+			std::make_unique<WindowMoveEvent>(x, y));
 	}
 	void WindowImpl::focusCallback(GLFWwindow *, int f) {
 		EventSystem::Instance().EnqueueEvent(
@@ -39,6 +43,7 @@ namespace EngineThingy {
 		ET_ENSURE(_win);
 		glfwSetWindowSizeCallback(_win, sizeCallback);
 		glfwSetWindowFocusCallback(_win, focusCallback);
+		glfwSetWindowPosCallback(_win, moveCallback);
 	}
 
 	WindowImpl::~WindowImpl() {
