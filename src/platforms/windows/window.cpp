@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <et/platforms/windows/window.h>
 #include <et/events/window.hpp>
+#include <et/logsystem.hpp>
 
 #ifdef ET_WINDOWS
 

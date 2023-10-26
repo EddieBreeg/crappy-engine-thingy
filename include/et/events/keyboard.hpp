@@ -36,7 +36,7 @@ namespace EngineThingy {
 			return _code;
 		}
 
-		ET_EVENT_CLASS(EventType::KeyPress,
+		ET_EVENT_CLASS(EventType::KeyRelease,
 					   ET_EVENT_CATEGORY_MASK(EventCategory::Input,
 											  EventCategory::Keyboard))
 	};
