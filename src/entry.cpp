@@ -1,6 +1,7 @@
 #include <et/entry.hpp>
 #include <et/rng.hpp>
 #include <et/events/application.hpp>
+#include <et/events/window.hpp>
 #include <et/window_system.hpp>
 #include <csignal>
 
@@ -35,6 +36,7 @@ namespace EngineThingy {
 		auto *app = new Application(args);
 		return *(_instance = std::unique_ptr<Application>(app));
 	}
+
 	void Application::Run() {
 		_startTime = Clock::now();
 		auto &eventSystem = EventSystem::Instance();
@@ -47,6 +49,11 @@ namespace EngineThingy {
 		eventSystem.AddListener<ApplicationQuitEvent>(
 			[this](const ApplicationQuitEvent &) {
 				ET_CORE_LOG_INFO("Received application quit event");
+				this->Stop();
+			});
+		eventSystem.AddListener<WindowCloseEvent>(
+			[this](const WindowCloseEvent &) {
+				ET_CORE_LOG_INFO("Received window close event");
 				this->Stop();
 			});
 
