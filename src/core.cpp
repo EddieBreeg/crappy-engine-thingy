@@ -4,6 +4,18 @@
 
 #ifdef ET_DEBUG
 
+#ifdef ET_WINDOWS
+#include <intrin.h>
+void debug_break(void) {
+	__debugbreak();
+}
+#else
+#include <csignal>
+void debug_break() {
+	raise(SIGTRAP);
+}
+#endif
+
 #ifdef ET_CONSOLE_MODE
 #include <iostream>
 #endif
@@ -20,7 +32,7 @@ namespace EngineThingy {
 		   << lineNumber;
 		ET_CORE_LOG_FATAL(ss.str());
 		cpptrace::generate_trace().print(std::cerr);
-		abort();
+		debug_break();
 	}
 
 } // namespace EngineThingy

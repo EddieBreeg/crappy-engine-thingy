@@ -85,3 +85,5 @@ namespace EngineThingy {
 
 template <class T>
 using heap_ptr = T *;
+
+void ET_API debug_break(void);
