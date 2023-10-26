@@ -17,12 +17,11 @@ namespace EngineThingy {
 	public:
 		void Update(Timing delta);
 		static EventSystem &Init();
-		template <class E, class F, class... Args>
-		void AddListener(F &&callback, Args &&...a) {
+		template <class E, class F>
+		void AddListener(F &&callback) {
 			static_assert(is_event_v<E>, "Invalid event type");
 			_listeners[static_cast<size_t>(E::type)].emplace_back(
-				EventDispatcher::Create<E>(std::forward<F>(callback),
-										   std::forward<Args>(a)...));
+				EventDispatcher::Create<E>(std::forward<F>(callback)));
 		}
 		void EnqueueEvent(EventReference e);
 		~EventSystem();

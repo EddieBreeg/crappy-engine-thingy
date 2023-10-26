@@ -107,39 +107,13 @@ namespace EngineThingy {
 		using TypeFuncPtr = EventType (*)();
 		using Callback = libstra::unique_function<void(const Event &)>;
 
-		template <class F, class E, class Tuple, size_t... I>
-		static void apply(F &&f, const E &evt, Tuple &&args,
-						  std::index_sequence<I...>) {
-			f(evt, std::get<I>(args)...);
-		}
-		template <class F, class E, class Tuple>
-		static void apply(F &&f, const E &evt, Tuple &&args) {
-			using ISeq = std::make_index_sequence<
-				std::tuple_size_v<std::decay_t<Tuple>>>;
-			apply(std::forward<F>(f), evt, std::forward<Tuple>(args), ISeq{});
-		}
-
 	public:
-		template <class Evt, class F, class... Args>
-		static EventDispatcher Create(F &&func, Args &&...args) {
-			static_assert(is_event_v<Evt>, "Invalid event type");
-			using RawFunc_t = std::decay_t<F>;
-			static_assert(
-				libstra::is_invocable_v<RawFunc_t, const Evt &, Args...>,
-				"Invalid callback");
-			static_assert(
-				std::is_void_v<decltype(func(std::declval<Evt>(),
-											 std::forward<Args>(args)...))>,
-				"Callback must not return a value");
-			using ArgTuple = std::tuple<std::decay_t<Args>...>;
-			return EventDispatcher(
-				[f = std::forward<RawFunc_t>(func),
-				 a = ArgTuple{ libstra::forward<Args>(args)... }](
-					const Event &evt) {
-					EventDispatcher::apply(f, dynamic_cast<const Evt &>(evt),
-										   a);
-				},
-				[]() { return Evt::type; });
+		template <class Evt, class F>
+		static EventDispatcher Create(F &&func) {
+			Callback cbk = [f = std::forward<F>(func)](const Event &e) {
+				f((const Evt &)(e));
+			};
+			return EventDispatcher(std::move(cbk), []() { return Evt::type; });
 		}
 		void operator()(const Event &evt);
 		EventType GetEventType() const noexcept { return _getType(); }

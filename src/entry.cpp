@@ -2,6 +2,7 @@
 #include <et/rng.hpp>
 #include <et/events/application.hpp>
 #include <et/events/window.hpp>
+#include <et/events/keyboard.hpp>
 #include <et/window_system.hpp>
 #include <csignal>
 
@@ -9,9 +10,10 @@
 #include <cpptrace/cpptrace.hpp>
 #include <iostream>
 
-void sigsegv_handler(int) {
-	ET_CORE_LOG_FATAL("Segmentation fault!");
+void crash_handler(int) {
+	ET_CORE_LOG_FATAL("Application crashed");
 	cpptrace::generate_trace().print(std::cerr);
+	debug_break();
 }
 #endif
 
@@ -33,7 +35,8 @@ int ET_API main(int argc, char const *argv[]) {
 #ifdef ET_CONSOLE_MODE
 	std::signal(SIGINT, interrupt_handler);
 #ifdef ET_DEBUG
-	std::signal(SIGSEGV, sigsegv_handler);
+	std::signal(SIGSEGV, crash_handler);
+	std::signal(SIGABRT, crash_handler);
 #endif
 #endif
 
@@ -59,12 +62,6 @@ namespace EngineThingy {
 		LogSystem::Instance().SetLevel(spdlog::level::trace);
 		_startTime = Clock::now();
 		auto &eventSystem = EventSystem::Instance();
-		eventSystem.AddListener<ApplicationStartEvent>(
-			[](const ApplicationStartEvent &) {
-				ET_CORE_LOG_INFO("Application start event received");
-			});
-		eventSystem.EnqueueEvent(std::make_unique<ApplicationStartEvent>());
-
 		eventSystem.AddListener<ApplicationQuitEvent>(
 			[this](const ApplicationQuitEvent &) {
 				ET_CORE_LOG_INFO("Received application quit event");
@@ -79,6 +76,11 @@ namespace EngineThingy {
 			[](const WindowFocusEvent &evt) {
 				if (evt.focused) ET_CORE_LOG_TRACE("Window gained focus");
 				else ET_CORE_LOG_TRACE("Window lost focus");
+			});
+		eventSystem.AddListener<KeyPressedEvent>(
+			[](const KeyPressedEvent &evt) {
+				ET_CORE_LOG_TRACE(fmt::format("Key {} pressed (repeat={})",
+											  evt.GetCode(), evt.IsRepeat()));
 			});
 		TimePoint t;
 		Timing delta{ 0 };
