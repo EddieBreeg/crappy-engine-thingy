@@ -12,6 +12,8 @@ namespace EngineThingy {
 		static void sizeCallback(GLFWwindow *, int w, int h);
 		static void moveCallback(GLFWwindow *, int w, int h);
 		static void focusCallback(GLFWwindow *, int focused);
+		static void keyCallback(GLFWwindow *, int k, int scancode, int action,
+								int mods);
 
 	public:
 		WindowImpl(uint32_t width, uint32_t height, const std::string &title,

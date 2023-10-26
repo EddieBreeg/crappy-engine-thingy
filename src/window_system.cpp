@@ -1,5 +1,6 @@
 #include <et/window_system.hpp>
 #include <et/events/window.hpp>
+#include <et/events/keyboard.hpp>
 
 namespace EngineThingy {
 	Window::Window(uint32_t width, uint32_t height, const std::string &title) :
@@ -24,6 +25,14 @@ namespace EngineThingy {
 	void Window::OnFocusChange(bool focused) const {
 		EventSystem::Instance().EnqueueEvent(
 			std::make_unique<WindowFocusEvent>(focused));
+	}
+	void Window::OnKeyPress(int k, bool r) const {
+		EventSystem::Instance().EnqueueEvent(
+			std::make_unique<KeyPressedEvent>(k, r));
+	}
+	void Window::OnKeyRelease(int k) const {
+		EventSystem::Instance().EnqueueEvent(
+			std::make_unique<KeyReleasedEvent>(k));
 	}
 
 	Window &WindowSystem::CreateWindow(uint32_t width, uint32_t height,

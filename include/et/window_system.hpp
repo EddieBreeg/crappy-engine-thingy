@@ -32,6 +32,8 @@ namespace EngineThingy {
 		void OnMove(int x, int y) const;
 		void OnResize(int x, int y);
 		void OnFocusChange(bool focused) const;
+		void OnKeyPress(int k, bool repeat) const;
+		void OnKeyRelease(int k) const;
 
 	public:
 		virtual ~Window() = default;

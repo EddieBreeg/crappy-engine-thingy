@@ -22,6 +22,25 @@ namespace EngineThingy {
 			reinterpret_cast<WindowImpl *>(glfwGetWindowUserPointer(ptr));
 		win->OnFocusChange(f);
 	}
+	void WindowImpl::keyCallback(GLFWwindow *ptr, int k, int, int action,
+								 int mods) {
+		auto *win =
+			reinterpret_cast<WindowImpl *>(glfwGetWindowUserPointer(ptr));
+		switch (action) {
+		case GLFW_PRESS:
+			win->OnKeyPress(k, false);
+			break;
+		case GLFW_REPEAT:
+			win->OnKeyPress(k, true);
+			break;
+		case GLFW_RELEASE:
+			win->OnKeyRelease(k);
+			break;
+		default:
+			ET_ASSERT(0);
+			break;
+		}
+	}
 
 	WindowSystem::WindowSystem() {
 		int success = glfwInit();
@@ -42,10 +61,11 @@ namespace EngineThingy {
 									: NULL,
 								NULL);
 		ET_ASSERT(_win);
+		glfwSetWindowUserPointer(_win, this);
 		glfwSetWindowSizeCallback(_win, sizeCallback);
 		glfwSetWindowFocusCallback(_win, focusCallback);
 		glfwSetWindowPosCallback(_win, moveCallback);
-		glfwSetWindowUserPointer(_win, this);
+		glfwSetKeyCallback(_win, keyCallback);
 	}
 
 	WindowImpl::~WindowImpl() {
