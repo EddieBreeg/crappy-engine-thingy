@@ -6,6 +6,15 @@
 #ifdef ET_WINDOWS
 
 namespace EngineThingy {
+
+	void WindowImpl::sizeCallback(GLFWwindow *, int w, int h) {
+		WindowImpl &win = (WindowImpl &)WindowSystem::Instance().GetActive();
+		EventSystem::Instance().EnqueueEvent(
+			std::make_unique<WindowResizeEvent>(win.GetSize(),
+												std::pair{ w, h }));
+		win._size = std::pair<uint32_t, uint32_t>{ w, h };
+	}
+
 	WindowSystem::WindowSystem() {
 		ET_ENSURE(glfwInit());
 	}
@@ -15,12 +24,16 @@ namespace EngineThingy {
 	WindowImpl::WindowImpl(uint32_t width, uint32_t height,
 						   const std::string &title, WindowFlags flags) :
 		Window(width, height, title) {
+		glfwWindowHint(GLFW_RESIZABLE,
+					   CheckWindowFlag(flags, WindowFlags::Resizable));
+
 		_win = glfwCreateWindow(width, height, title.data(),
 								CheckWindowFlag(flags, WindowFlags::Fullscreen)
 									? glfwGetPrimaryMonitor()
 									: NULL,
 								NULL);
 		ET_ENSURE(_win);
+		glfwSetWindowSizeCallback(_win, sizeCallback);
 	}
 
 	WindowImpl::~WindowImpl() {
@@ -33,6 +46,7 @@ namespace EngineThingy {
 			EventSystem::Instance().EnqueueEvent(
 				std::make_unique<WindowCloseEvent>());
 		}
+		glfwSwapBuffers(_win);
 	}
 	void WindowImpl::SetVsync(bool VSync) {}
 	void WindowImpl::SetResizeable(bool r) {}

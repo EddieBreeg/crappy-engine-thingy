@@ -6,7 +6,7 @@
 namespace EngineThingy {
 	enum class WindowFlags : uint32_t {
 		None = 0,
-		Resizeable = BIT(0),
+		Resizable = BIT(0),
 		Fullscreen = BIT(1),
 		VSync = BIT(2),
 	};
@@ -34,6 +34,10 @@ namespace EngineThingy {
 		virtual void Update(Timing) = 0;
 		virtual void SetResizeable(bool resizeable) = 0;
 		virtual void SetVsync(bool vsync) = 0;
+		[[nodiscard]]
+		std::pair<uint32_t, uint32_t> GetSize() const noexcept {
+			return _size;
+		}
 
 		static std::unique_ptr<Window> Create(uint32_t width, uint32_t height,
 											  const std::string &title,
@@ -48,6 +52,10 @@ namespace EngineThingy {
 		Window &CreateWindow(uint32_t width, uint32_t height,
 							 const std::string &title,
 							 WindowFlags flags = WindowFlags::None);
+		Window &GetActive() {
+			ET_ENSURE(_window);
+			return *_window;
+		}
 
 	private:
 		WindowSystem();

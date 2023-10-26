@@ -34,7 +34,6 @@ int ET_API main(int argc, char const *argv[]) {
 #endif
 #endif
 
-	WindowSystem::Instance().CreateWindow(1280, 720, "ET");
 	app.Run();
 	return 0;
 }
@@ -52,6 +51,8 @@ namespace EngineThingy {
 	}
 
 	void Application::Run() {
+		WindowSystem::Instance().CreateWindow(1280, 720, "ET",
+											  WindowFlags::Resizable);
 		_startTime = Clock::now();
 		auto &eventSystem = EventSystem::Instance();
 		eventSystem.AddListener<ApplicationStartEvent>(
@@ -70,7 +71,6 @@ namespace EngineThingy {
 				ET_CORE_LOG_INFO("Received window close event");
 				this->Stop();
 			});
-
 		TimePoint t;
 		Timing delta{ 0 };
 		while (_run) {

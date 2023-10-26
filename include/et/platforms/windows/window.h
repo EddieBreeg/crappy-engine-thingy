@@ -9,6 +9,7 @@ namespace EngineThingy {
 	class ET_API WindowImpl : public Window {
 	private:
 		GLFWwindow *_win = nullptr;
+		static void sizeCallback(GLFWwindow *, int w, int h);
 
 	public:
 		WindowImpl(uint32_t width, uint32_t height, const std::string &title,
