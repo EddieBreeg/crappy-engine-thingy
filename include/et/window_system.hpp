@@ -53,7 +53,7 @@ namespace EngineThingy {
 							 const std::string &title,
 							 WindowFlags flags = WindowFlags::None);
 		Window &GetActive() {
-			ET_ENSURE(_window);
+			ET_ASSERT(_window);
 			return *_window;
 		}
 

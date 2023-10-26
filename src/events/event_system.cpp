@@ -4,7 +4,7 @@
 namespace EngineThingy {
 
 	EventSystem &EventSystem::Init() {
-		ET_ENSURE(!_instance);
+		ET_ASSERT(!_instance);
 		auto *sys = new EventSystem();
 		return *(_instance = std::unique_ptr<EventSystem>(sys));
 	}

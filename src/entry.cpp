@@ -45,7 +45,7 @@ namespace EngineThingy {
 	}
 
 	Application &Application::Init(AppArgs_t args) {
-		ET_ENSURE(!_instance);
+		ET_ASSERT(!_instance);
 		auto *app = new Application(args);
 		return *(_instance = std::unique_ptr<Application>(app));
 	}

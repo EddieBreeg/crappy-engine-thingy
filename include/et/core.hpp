@@ -66,9 +66,9 @@ namespace EngineThingy {
 							int lineNumber);
 } // namespace EngineThingy
 
-#define ET_ENSURE(expr)                                                        \
+#define ET_ASSERT(expr)                                                        \
 	EngineThingy::ensure_impl(!!(expr), #expr, __FILE__, __LINE__)
-#define ET_ENSURE_ONCE(expr)                                                   \
+#define ET_ASSERT_ONCE(expr)                                                   \
 	{                                                                          \
 		static bool checkDone = false;                                         \
 		if (!checkDone) {                                                      \
@@ -78,7 +78,7 @@ namespace EngineThingy {
 	}
 
 #else
-#define ET_ENSURE(expr) 0
+#define ET_ASSERT(expr) 0
 #endif
 
 #define ENUM_TO_INT(e) static_cast<std::underlying_type_t<decltype(e)>>(e)

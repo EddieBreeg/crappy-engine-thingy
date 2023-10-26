@@ -5,7 +5,7 @@ namespace EngineThingy {
 		_size{ width, height }, _title(title) {}
 
 	WindowSystem &WindowSystem::Init() {
-		ET_ENSURE(!_instance);
+		ET_ASSERT(!_instance);
 		static WindowSystem s;
 		return *(_instance = &s);
 	}
@@ -18,7 +18,7 @@ namespace EngineThingy {
 	}
 
 	void WindowSystem::Update(Timing t) {
-		ET_ENSURE_ONCE(_window);
+		ET_ASSERT_ONCE(_window);
 		_window->Update(t);
 	}
 } // namespace EngineThingy

@@ -25,7 +25,7 @@ namespace EngineThingy {
 
 	WindowSystem::WindowSystem() {
 		int success = glfwInit();
-		ET_ENSURE(success);
+		ET_ASSERT(success);
 	}
 	WindowSystem::~WindowSystem() {
 		glfwTerminate();
@@ -41,7 +41,7 @@ namespace EngineThingy {
 									? glfwGetPrimaryMonitor()
 									: NULL,
 								NULL);
-		ET_ENSURE(_win);
+		ET_ASSERT(_win);
 		glfwSetWindowSizeCallback(_win, sizeCallback);
 		glfwSetWindowFocusCallback(_win, focusCallback);
 		glfwSetWindowPosCallback(_win, moveCallback);
