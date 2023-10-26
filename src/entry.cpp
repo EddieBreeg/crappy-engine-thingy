@@ -53,6 +53,7 @@ namespace EngineThingy {
 	void Application::Run() {
 		WindowSystem::Instance().CreateWindow(1280, 720, "ET",
 											  WindowFlags::Resizable);
+		LogSystem::Instance().SetLevel(spdlog::level::trace);
 		_startTime = Clock::now();
 		auto &eventSystem = EventSystem::Instance();
 		eventSystem.AddListener<ApplicationStartEvent>(
@@ -72,9 +73,9 @@ namespace EngineThingy {
 				this->Stop();
 			});
 		eventSystem.AddListener<WindowFocusEvent>(
-			[this](const WindowFocusEvent &evt) {
-				if (evt.focused) ET_CORE_LOG_INFO("Window gained focus");
-				else ET_CORE_LOG_INFO("Window lost focus");
+			[](const WindowFocusEvent &evt) {
+				if (evt.focused) ET_CORE_LOG_TRACE("Window gained focus");
+				else ET_CORE_LOG_TRACE("Window lost focus");
 			});
 		TimePoint t;
 		Timing delta{ 0 };

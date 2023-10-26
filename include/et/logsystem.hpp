@@ -13,9 +13,14 @@ namespace EngineThingy {
 	public:
 		void Update(Timing) const {}
 		static LogSystem &Init();
+		void SetLevel(spdlog::level::level_enum lvl);
 
 #ifdef ET_BUILD
 
+		template <class Msg>
+		void CoreTrace(Msg &&message) {
+			_coreLogger->trace(std::forward<Msg>(message));
+		}
 		template <class Msg>
 		void CoreInfo(Msg &&message) {
 			_coreLogger->info(std::forward<Msg>(message));
@@ -34,19 +39,23 @@ namespace EngineThingy {
 		}
 #endif
 		template <class Msg>
-		void ClientInfo(Msg &&message) {
+		void Trace(Msg &&message) {
+			_clientLogger->trace(std::forward<Msg>(message));
+		}
+		template <class Msg>
+		void Info(Msg &&message) {
 			_clientLogger->info(std::forward<Msg>(message));
 		}
 		template <class Msg>
-		void ClientWarn(Msg &&message) {
+		void Warn(Msg &&message) {
 			_clientLogger->warn(std::forward<Msg>(message));
 		}
 		template <class Msg>
-		void ClientError(Msg &&message) {
+		void Error(Msg &&message) {
 			_clientLogger->error(std::forward<Msg>(message));
 		}
 		template <class Msg>
-		void ClientFatal(Msg &&message) {
+		void Fatal(Msg &&message) {
 			_clientLogger->critical(std::forward<Msg>(message));
 		}
 
@@ -56,11 +65,13 @@ namespace EngineThingy {
 } // namespace EngineThingy
 
 #ifdef ET_DEBUG
-#define ET_LOG_INFO(x) EngineThingy::LogSystem::Instance().ClientInfo(x)
-#define ET_LOG_WARN(x) EngineThingy::LogSystem::Instance().ClientWarn(x)
-#define ET_LOG_ERROR(x) EngineThingy::LogSystem::Instance().ClientError(x)
-#define ET_LOG_FATAL(x) EngineThingy::LogSystem::Instance().ClientFatal(x)
+#define ET_LOG_TRACE(x) EngineThingy::LogSystem::Instance().Trace(x)
+#define ET_LOG_INFO(x) EngineThingy::LogSystem::Instance().Info(x)
+#define ET_LOG_WARN(x) EngineThingy::LogSystem::Instance().Warn(x)
+#define ET_LOG_ERROR(x) EngineThingy::LogSystem::Instance().Error(x)
+#define ET_LOG_FATAL(x) EngineThingy::LogSystem::Instance().Fatal(x)
 #ifdef ET_BUILD
+#define ET_CORE_LOG_TRACE(x) EngineThingy::LogSystem::Instance().CoreTrace(x)
 #define ET_CORE_LOG_INFO(x) EngineThingy::LogSystem::Instance().CoreInfo(x)
 #define ET_CORE_LOG_WARN(x) EngineThingy::LogSystem::Instance().CoreWarn(x)
 #define ET_CORE_LOG_ERROR(x) EngineThingy::LogSystem::Instance().CoreError(x)

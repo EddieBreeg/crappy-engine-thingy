@@ -9,7 +9,9 @@ namespace EngineThingy {
 		_clientLogger = spdlog::stdout_color_mt("CLIENT");
 	}
 	LogSystem::~LogSystem() {}
-
+	void LogSystem::SetLevel(spdlog::level::level_enum lvl) {
+		spdlog::set_level(lvl);
+	}
 	LogSystem &LogSystem::Init() {
 		assert(!_instance);
 		static LogSystem ls(spdlog::level::info);
