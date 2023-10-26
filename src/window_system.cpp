@@ -26,11 +26,11 @@ namespace EngineThingy {
 		EventSystem::Instance().EnqueueEvent(
 			std::make_unique<WindowFocusEvent>(focused));
 	}
-	void Window::OnKeyPress(int k, bool r) const {
+	void Window::OnKeyPress(KeyCode k, bool r) const {
 		EventSystem::Instance().EnqueueEvent(
 			std::make_unique<KeyPressedEvent>(k, r));
 	}
-	void Window::OnKeyRelease(int k) const {
+	void Window::OnKeyRelease(KeyCode k) const {
 		EventSystem::Instance().EnqueueEvent(
 			std::make_unique<KeyReleasedEvent>(k));
 	}

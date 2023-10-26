@@ -2,7 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <et/platforms/windows/window.h>
 #include <et/events/window.hpp>
-#include <et/logsystem.hpp>
+#include <et/events/keyboard.hpp>
 
 #ifdef ET_WINDOWS
 
@@ -29,13 +29,13 @@ namespace EngineThingy {
 			reinterpret_cast<WindowImpl *>(glfwGetWindowUserPointer(ptr));
 		switch (action) {
 		case GLFW_PRESS:
-			win->OnKeyPress(k, false);
+			win->OnKeyPress(static_cast<KeyCode>(k), false);
 			break;
 		case GLFW_REPEAT:
-			win->OnKeyPress(k, true);
+			win->OnKeyPress(static_cast<KeyCode>(k), true);
 			break;
 		case GLFW_RELEASE:
-			win->OnKeyRelease(k);
+			win->OnKeyRelease(static_cast<KeyCode>(k));
 			break;
 		default:
 			ET_ASSERT(0);

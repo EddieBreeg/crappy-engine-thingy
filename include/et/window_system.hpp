@@ -2,6 +2,7 @@
 
 #include <et/core.hpp>
 #include <et/singleton.hpp>
+#include <et/events/keyboard.hpp>
 
 namespace EngineThingy {
 	enum class WindowFlags : uint32_t {
@@ -32,8 +33,8 @@ namespace EngineThingy {
 		void OnMove(int x, int y) const;
 		void OnResize(int x, int y);
 		void OnFocusChange(bool focused) const;
-		void OnKeyPress(int k, bool repeat) const;
-		void OnKeyRelease(int k) const;
+		void OnKeyPress(KeyCode k, bool repeat) const;
+		void OnKeyRelease(KeyCode k) const;
 
 	public:
 		virtual ~Window() = default;
