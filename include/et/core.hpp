@@ -68,6 +68,15 @@ namespace EngineThingy {
 
 #define ET_ENSURE(expr)                                                        \
 	EngineThingy::ensure_impl(!!(expr), #expr, __FILE__, __LINE__)
+#define ET_ENSURE_ONCE(expr)                                                   \
+	{                                                                          \
+		static bool checkDone = false;                                         \
+		if (!checkDone) {                                                      \
+			checkDone = true;                                                  \
+			EngineThingy::ensure_impl(!!(expr), #expr, __FILE__, __LINE__);    \
+		}                                                                      \
+	}
+
 #else
 #define ET_ENSURE(expr) 0
 #endif

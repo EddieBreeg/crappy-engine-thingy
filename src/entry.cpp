@@ -1,6 +1,7 @@
 #include <et/entry.hpp>
 #include <et/rng.hpp>
 #include <et/events/application.hpp>
+#include <et/window_system.hpp>
 #include <csignal>
 
 #ifdef ET_CONSOLE_MODE
@@ -13,11 +14,12 @@ void interrupt_handler(int) {
 int ET_API main(int argc, char const *argv[]) {
 	using namespace EngineThingy;
 	auto &app = Application::Init({ argv, argv + argc });
-	app.RegisterSystems<LogSystem, EventSystem>();
+	app.RegisterSystems<LogSystem, EventSystem, WindowSystem>();
 	ET_CORE_LOG_INFO("All major systems initialized");
 #ifdef ET_CONSOLE_MODE
 	std::signal(SIGINT, interrupt_handler);
 #endif
+	WindowSystem::Instance().CreateWindow(1280, 720, "ET");
 	app.Run();
 	return 0;
 }
