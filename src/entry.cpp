@@ -5,7 +5,17 @@
 #include <et/window_system.hpp>
 #include <csignal>
 
-#ifdef ET_CONSOLE_MODE
+#if defined(ET_DEBUG) && defined(ET_CONSOLE_MODE)
+#include <cpptrace/cpptrace.hpp>
+#include <iostream>
+
+void sigsegv_handler(int) {
+	ET_CORE_LOG_FATAL("Segmentation fault!");
+	cpptrace::generate_trace().print(std::cerr);
+}
+#endif
+
+#if defined(ET_CONSOLE_MODE)
 void interrupt_handler(int) {
 	EngineThingy::EventSystem::Instance().EnqueueEvent(
 		std::make_unique<EngineThingy::ApplicationQuitEvent>());
@@ -19,7 +29,11 @@ int ET_API main(int argc, char const *argv[]) {
 	ET_CORE_LOG_INFO("All major systems initialized");
 #ifdef ET_CONSOLE_MODE
 	std::signal(SIGINT, interrupt_handler);
+#ifdef ET_DEBUG
+	std::signal(SIGSEGV, sigsegv_handler);
 #endif
+#endif
+
 	WindowSystem::Instance().CreateWindow(1280, 720, "ET");
 	app.Run();
 	return 0;

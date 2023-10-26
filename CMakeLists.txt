@@ -39,7 +39,7 @@ set(BUILD_SHARED_LIBS FALSE)
 add_subdirectory(deps)
 set(GLFW_BUILD_TESTS OFF)
 set(GLFW_BUILD_EXAMPLES OFF)
-target_link_libraries(${PROJECT_NAME} PUBLIC libstra spdlog glfw)
+target_link_libraries(${PROJECT_NAME} PUBLIC libstra spdlog glfw cpptrace)
 
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

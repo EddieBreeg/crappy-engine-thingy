@@ -7,3 +7,6 @@
 [submodule "deps/glfw"]
 	path = deps/glfw
 	url = git@github.com:glfw/glfw.git
+[submodule "deps/cpptrace"]
+	path = deps/cpptrace
+	url = git@github.com:jeremy-rifkin/cpptrace.git
