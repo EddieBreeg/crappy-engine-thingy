@@ -12,4 +12,10 @@ namespace EngineThingy {
 		   << newSize.first << ", " << newSize.second << ')';
 		return ss.str();
 	}
+
+	WindowFocusEvent::WindowFocusEvent(bool f) : focused(f) {}
+	WindowFocusEvent::operator std::string() const {
+		char c = static_cast<char>(focused) + '0';
+		return std::string(1, c);
+	}
 } // namespace EngineThingy

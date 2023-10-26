@@ -71,6 +71,11 @@ namespace EngineThingy {
 				ET_CORE_LOG_INFO("Received window close event");
 				this->Stop();
 			});
+		eventSystem.AddListener<WindowFocusEvent>(
+			[this](const WindowFocusEvent &evt) {
+				if (evt.focused) ET_CORE_LOG_INFO("Window gained focus");
+				else ET_CORE_LOG_INFO("Window lost focus");
+			});
 		TimePoint t;
 		Timing delta{ 0 };
 		while (_run) {

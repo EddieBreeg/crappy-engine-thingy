@@ -11,6 +11,7 @@ namespace EngineThingy {
 					   ET_EVENT_CATEGORY_MASK(EventCategory::Application,
 											  EventCategory::Window))
 	};
+
 	class ET_API WindowResizeEvent : public Event {
 	public:
 		using WindowSize = std::pair<uint32_t, uint32_t>;
@@ -18,6 +19,15 @@ namespace EngineThingy {
 		WindowResizeEvent(WindowSize oldSize, WindowSize newSize);
 		ET_EVENT_CLASS(EventType::WindowResize, EventCategory::Window);
 		operator std::string() const override;
+	};
+
+	class ET_API WindowFocusEvent : public Event {
+	public:
+		bool focused;
+
+		WindowFocusEvent(bool focused);
+		operator std::string() const override;
+		ET_EVENT_CLASS(EventType::WindowFocus, EventCategory::Window);
 	};
 
 } // namespace EngineThingy

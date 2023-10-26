@@ -9,6 +9,7 @@ namespace EngineThingy {
 		WindowClose,
 		WindowResize,
 		WindowMove,
+		WindowFocus,
 
 		MouseMove,
 		MouseButtonPress,

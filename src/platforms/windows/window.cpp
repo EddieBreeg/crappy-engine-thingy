@@ -14,6 +14,10 @@ namespace EngineThingy {
 												std::pair{ w, h }));
 		win._size = std::pair<uint32_t, uint32_t>{ w, h };
 	}
+	void WindowImpl::focusCallback(GLFWwindow *, int f) {
+		EventSystem::Instance().EnqueueEvent(
+			std::make_unique<WindowFocusEvent>(bool(f)));
+	}
 
 	WindowSystem::WindowSystem() {
 		ET_ENSURE(glfwInit());
@@ -34,6 +38,7 @@ namespace EngineThingy {
 								NULL);
 		ET_ENSURE(_win);
 		glfwSetWindowSizeCallback(_win, sizeCallback);
+		glfwSetWindowFocusCallback(_win, focusCallback);
 	}
 
 	WindowImpl::~WindowImpl() {
