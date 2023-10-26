@@ -29,6 +29,10 @@ namespace EngineThingy {
 		std::string _title;
 		Window(uint32_t width, uint32_t height, const std::string &title);
 
+		void OnMove(int x, int y) const;
+		void OnResize(int x, int y);
+		void OnFocusChange(bool focused) const;
+
 	public:
 		virtual ~Window() = default;
 		virtual void Update(Timing) = 0;

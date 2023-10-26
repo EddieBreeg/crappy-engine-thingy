@@ -7,21 +7,20 @@
 
 namespace EngineThingy {
 
-	void WindowImpl::sizeCallback(GLFWwindow *nativePtr, int w, int h) {
+	void WindowImpl::sizeCallback(GLFWwindow *ptr, int w, int h) {
 		auto *win =
-			reinterpret_cast<WindowImpl *>(glfwGetWindowUserPointer(nativePtr));
-		EventSystem::Instance().EnqueueEvent(
-			std::make_unique<WindowResizeEvent>(
-				win->GetSize(), std::pair<uint32_t, uint32_t>{ w, h }));
-		win->_size = std::pair<uint32_t, uint32_t>{ w, h };
+			reinterpret_cast<WindowImpl *>(glfwGetWindowUserPointer(ptr));
+		win->OnResize(w, h);
 	}
-	void WindowImpl::moveCallback(GLFWwindow *, int x, int y) {
-		EventSystem::Instance().EnqueueEvent(
-			std::make_unique<WindowMoveEvent>(x, y));
+	void WindowImpl::moveCallback(GLFWwindow *ptr, int x, int y) {
+		auto *win =
+			reinterpret_cast<WindowImpl *>(glfwGetWindowUserPointer(ptr));
+		win->OnMove(x, y);
 	}
-	void WindowImpl::focusCallback(GLFWwindow *, int f) {
-		EventSystem::Instance().EnqueueEvent(
-			std::make_unique<WindowFocusEvent>(bool(f)));
+	void WindowImpl::focusCallback(GLFWwindow *ptr, int f) {
+		auto *win =
+			reinterpret_cast<WindowImpl *>(glfwGetWindowUserPointer(ptr));
+		win->OnFocusChange(f);
 	}
 
 	WindowSystem::WindowSystem() {

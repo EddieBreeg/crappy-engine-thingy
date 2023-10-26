@@ -1,4 +1,5 @@
 #include <et/window_system.hpp>
+#include <et/events/window.hpp>
 
 namespace EngineThingy {
 	Window::Window(uint32_t width, uint32_t height, const std::string &title) :
@@ -8,6 +9,21 @@ namespace EngineThingy {
 		ET_ASSERT(!_instance);
 		static WindowSystem s;
 		return *(_instance = &s);
+	}
+
+	void Window::OnMove(int x, int y) const {
+		EventSystem::Instance().EnqueueEvent(
+			std::make_unique<WindowMoveEvent>(x, y));
+	}
+	void Window::OnResize(int x, int y) {
+		EventSystem::Instance().EnqueueEvent(
+			std::make_unique<WindowResizeEvent>(_size,
+												decltype(_size){ x, y }));
+		_size = { x, y };
+	}
+	void Window::OnFocusChange(bool focused) const {
+		EventSystem::Instance().EnqueueEvent(
+			std::make_unique<WindowFocusEvent>(focused));
 	}
 
 	Window &WindowSystem::CreateWindow(uint32_t width, uint32_t height,
