@@ -73,8 +73,6 @@ namespace EngineThingy {
 			Update(delta);
 			delta = Clock::now() - t;
 		}
-
-		delete this;
 	}
 	void Application::Update(Timing delta) {
 		for (const SystemInstance &sys : _systems)
