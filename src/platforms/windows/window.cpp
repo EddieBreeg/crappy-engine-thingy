@@ -3,6 +3,7 @@
 #include <et/platforms/windows/window.h>
 #include <et/events/window.hpp>
 #include <et/events/keyboard.hpp>
+#include <et/logsystem.hpp>
 
 #ifdef ET_WINDOWS
 
@@ -23,6 +24,23 @@ namespace EngineThingy {
 			reinterpret_cast<WindowImpl *>(glfwGetWindowUserPointer(ptr));
 		win->OnFocusChange(f);
 	}
+	void WindowImpl::mouseButtonCallback(GLFWwindow *ptr, int btn, int action,
+										 int mods) {
+		auto *win =
+			reinterpret_cast<WindowImpl *>(glfwGetWindowUserPointer(ptr));
+		switch (action) {
+		case GLFW_PRESS:
+			win->OnMouseButtonPress((MouseButton)btn);
+			break;
+		case GLFW_RELEASE:
+			win->OnMouseButtonRelease((MouseButton)btn);
+			break;
+		default:
+			ET_ASSERT(0);
+			break;
+		}
+	}
+
 	void WindowImpl::keyCallback(GLFWwindow *ptr, int k, int, int action,
 								 int mods) {
 		auto *win =
@@ -66,6 +84,7 @@ namespace EngineThingy {
 		glfwSetWindowSizeCallback(_win, sizeCallback);
 		glfwSetWindowFocusCallback(_win, focusCallback);
 		glfwSetWindowPosCallback(_win, moveCallback);
+		glfwSetMouseButtonCallback(_win, mouseButtonCallback);
 		glfwSetKeyCallback(_win, keyCallback);
 	}
 

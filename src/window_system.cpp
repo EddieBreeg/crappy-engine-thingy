@@ -1,6 +1,5 @@
 #include <et/window_system.hpp>
 #include <et/events/window.hpp>
-#include <et/events/keyboard.hpp>
 
 namespace EngineThingy {
 	Window::Window(uint32_t width, uint32_t height, const std::string &title) :
@@ -33,6 +32,14 @@ namespace EngineThingy {
 	void Window::OnKeyRelease(KeyCode k) const {
 		EventSystem::Instance().EnqueueEvent(
 			std::make_unique<KeyReleasedEvent>(k));
+	}
+	void Window::OnMouseButtonPress(MouseButton k) const {
+		EventSystem::Instance().EnqueueEvent(
+			std::make_unique<MouseButtonPressedEvent>(k));
+	}
+	void Window::OnMouseButtonRelease(MouseButton k) const {
+		EventSystem::Instance().EnqueueEvent(
+			std::make_unique<MouseButtonReleasedEvent>(k));
 	}
 
 	Window &WindowSystem::CreateWindow(uint32_t width, uint32_t height,

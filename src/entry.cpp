@@ -79,12 +79,6 @@ namespace EngineThingy {
 				if (evt.focused) ET_CORE_LOG_TRACE("Window gained focus");
 				else ET_CORE_LOG_TRACE("Window lost focus");
 			});
-		eventSystem.AddListener<KeyPressedEvent>(
-			[](const KeyPressedEvent &evt) {
-				ET_CORE_LOG_TRACE(fmt::format("Key {} pressed (repeat={})",
-											  (int)evt.GetCode(),
-											  evt.IsRepeat()));
-			});
 		TimePoint t;
 		Timing delta{ 0 };
 		while (_run) {

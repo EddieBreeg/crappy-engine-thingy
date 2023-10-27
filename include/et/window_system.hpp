@@ -3,6 +3,7 @@
 #include <et/core.hpp>
 #include <et/singleton.hpp>
 #include <et/events/keyboard.hpp>
+#include <et/events/mouse.hpp>
 
 namespace EngineThingy {
 	enum class WindowFlags : uint32_t {
@@ -35,6 +36,9 @@ namespace EngineThingy {
 		void OnFocusChange(bool focused) const;
 		void OnKeyPress(KeyCode k, bool repeat) const;
 		void OnKeyRelease(KeyCode k) const;
+		void OnMouseButtonPress(MouseButton k) const;
+		void OnMouseButtonRelease(MouseButton k) const;
+		// void OnMouseMove(int x, int y) const;
 
 	public:
 		virtual ~Window() = default;
