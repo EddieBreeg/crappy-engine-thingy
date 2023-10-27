@@ -7,7 +7,7 @@
 #include <et/scene_system.hpp>
 #include <csignal>
 
-#if defined(ET_DEBUG) && defined(ET_CONSOLE_MODE)
+#if defined(ET_DEBUG)
 #include <cpptrace/cpptrace.hpp>
 #include <iostream>
 
@@ -37,6 +37,13 @@ namespace EngineThingy {
 		SceneSystem::Init();
 		ET_CORE_LOG_INFO("All core systems initialized");
 		RegisterSystems<EventSystem, SceneSystem, WindowSystem>();
+#ifdef ET_DEBUG
+		signal(SIGSEGV, crash_handler);
+		signal(SIGABRT, crash_handler);
+#endif
+#ifdef ET_CONSOLE_MODE
+		signal(SIGINT, interrupt_handler);
+#endif
 	}
 
 	// Application &Application::Init(AppArgs_t args) {
