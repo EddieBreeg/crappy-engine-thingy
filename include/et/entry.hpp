@@ -5,11 +5,18 @@
 #include <et/events/event_system.hpp>
 
 namespace EngineThingy {
+	class Application;
+} // namespace EngineThingy
 
-	class Application : Singleton<std::unique_ptr<Application>> {
-	private:
+namespace EngineThingy {
+
+	class ET_API Application : Singleton<Application *> {
+	protected:
 		libstra::array_view<const char *> _args;
 		Application(libstra::array_view<const char *> args);
+		// static void SetInstance(std::unique_ptr<Application> app);
+
+	private:
 		std::vector<SystemInstance> _systems;
 		bool _run = true;
 		TimePoint _startTime;
@@ -23,7 +30,6 @@ namespace EngineThingy {
 		}
 
 	public:
-		static Application &Init(libstra::array_view<const char *> args);
 		void Run();
 		void Stop() { _run = false; }
 		libstra::array_view<const char *> Args() const { return _args; }
@@ -41,7 +47,7 @@ namespace EngineThingy {
 
 		Application(Application &) = delete;
 
-		~Application();
+		virtual ~Application();
 	};
 
 } // namespace EngineThingy
