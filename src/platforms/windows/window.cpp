@@ -60,6 +60,11 @@ namespace EngineThingy {
 			break;
 		}
 	}
+	void WindowImpl::mouseMoveCallback(GLFWwindow *ptr, double x, double y) {
+		auto *win =
+			reinterpret_cast<WindowImpl *>(glfwGetWindowUserPointer(ptr));
+		win->OnMouseMove(x, y);
+	}
 
 	WindowSystem::WindowSystem() {
 		int success = glfwInit();
@@ -80,11 +85,13 @@ namespace EngineThingy {
 									: NULL,
 								NULL);
 		ET_ASSERT(_win);
+		glfwGetCursorPos(_win, &_mousePos.first, &_mousePos.second);
 		glfwSetWindowUserPointer(_win, this);
 		glfwSetWindowSizeCallback(_win, sizeCallback);
 		glfwSetWindowFocusCallback(_win, focusCallback);
 		glfwSetWindowPosCallback(_win, moveCallback);
 		glfwSetMouseButtonCallback(_win, mouseButtonCallback);
+		glfwSetCursorPosCallback(_win, mouseMoveCallback);
 		glfwSetKeyCallback(_win, keyCallback);
 	}
 

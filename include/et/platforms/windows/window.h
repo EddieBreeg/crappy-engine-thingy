@@ -14,6 +14,7 @@ namespace EngineThingy {
 		static void focusCallback(GLFWwindow *, int focused);
 		static void mouseButtonCallback(GLFWwindow *, int btn, int action,
 										int mods);
+		static void mouseMoveCallback(GLFWwindow *, double x, double y);
 		static void keyCallback(GLFWwindow *, int k, int scancode, int action,
 								int mods);
 

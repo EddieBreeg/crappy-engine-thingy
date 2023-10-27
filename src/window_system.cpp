@@ -41,6 +41,11 @@ namespace EngineThingy {
 		EventSystem::Instance().EnqueueEvent(
 			std::make_unique<MouseButtonReleasedEvent>(k));
 	}
+	void Window::OnMouseMove(double x, double y) {
+		EventSystem::Instance().EnqueueEvent(
+			std::make_unique<CursorMoveEvent>(_mousePos, std::pair{ x, y }));
+		_mousePos = { x, y };
+	}
 
 	Window &WindowSystem::CreateWindow(uint32_t width, uint32_t height,
 									   const std::string &title,

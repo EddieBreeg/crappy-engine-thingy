@@ -16,3 +16,4 @@
 #include <new>
 #include <filesystem>
 #include <fstream>
+#include <spdlog/fmt/fmt.h>

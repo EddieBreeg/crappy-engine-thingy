@@ -1,4 +1,5 @@
 #include <et/events/window.hpp>
+#include <spdlog/fmt/fmt.h>
 
 namespace EngineThingy {
 	WindowResizeEvent::WindowResizeEvent(
@@ -7,15 +8,11 @@ namespace EngineThingy {
 		oldSize(old), newSize(newSize) {}
 
 	WindowResizeEvent::operator std::string() const {
-		std::stringstream ss;
-		ss << '(' << oldSize.first << ", " << oldSize.second << ") -> ("
-		   << newSize.first << ", " << newSize.second << ')';
-		return ss.str();
+		return fmt::format("Window resize ({}, {}) -> ({}, {})", oldSize.first,
+						   oldSize.second, newSize.first, newSize.second);
 	}
 	WindowMoveEvent::operator std::string() const {
-		std::stringstream ss;
-		ss << '(' << x << ", " << y << ')';
-		return ss.str();
+		return fmt::format("({}, {})", x, y);
 	}
 	WindowMoveEvent::WindowMoveEvent(int x, int y) : x(x), y(y) {}
 

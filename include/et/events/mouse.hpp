@@ -31,4 +31,19 @@ namespace EngineThingy {
 											  EventCategory::Mouse))
 	};
 
+	class ET_API CursorMoveEvent : public Event {
+	public:
+		std::pair<double, double> oldPos, newPos;
+		CursorMoveEvent(std::pair<double, double> oldP,
+						std::pair<double, double> newP) :
+			oldPos(oldP), newPos(newP) {}
+		ET_EVENT_CLASS(EventType::MouseMove,
+					   ET_EVENT_CATEGORY_MASK(EventCategory::Input,
+											  EventCategory::Mouse))
+		operator std::string() const override {
+			return fmt::format("Mouse Move ({}, {}) -> ({}, {})", oldPos.first,
+							   oldPos.second, newPos.first, newPos.second);
+		}
+	};
+
 } // namespace EngineThingy

@@ -28,6 +28,7 @@ namespace EngineThingy {
 	class ET_API Window {
 	protected:
 		std::pair<uint32_t, uint32_t> _size;
+		std::pair<double, double> _mousePos;
 		std::string _title;
 		Window(uint32_t width, uint32_t height, const std::string &title);
 
@@ -38,7 +39,7 @@ namespace EngineThingy {
 		void OnKeyRelease(KeyCode k) const;
 		void OnMouseButtonPress(MouseButton k) const;
 		void OnMouseButtonRelease(MouseButton k) const;
-		// void OnMouseMove(int x, int y) const;
+		void OnMouseMove(double x, double y);
 
 	public:
 		virtual ~Window() = default;
