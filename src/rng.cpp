@@ -7,8 +7,9 @@
 static inline uint64_t splitmix64(uint64_t &x) {
 	x += 0x9e3779b97f4a7c15;
 	uint64_t z = x;
-	z = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9;
-	z = (z ^ (z >> 27)) * 0x94d049bb133111eb;
+	z		   = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9;
+	z		   = (z ^ (z >> 27)) * 0x94d049bb133111eb;
+
 	return x = (z ^ (z >> 31));
 }
 namespace EngineThingy {
@@ -37,9 +38,7 @@ namespace EngineThingy {
 		_state[3] ^= _state[1];
 		_state[1] ^= _state[2];
 		_state[0] ^= _state[3];
-
 		_state[2] ^= t;
-
 		_state[3] = rotl(_state[3], 45);
 
 		return result;

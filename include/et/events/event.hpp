@@ -32,22 +32,12 @@ namespace EngineThingy {
 		Keyboard = BIT(4),
 	};
 
-	template <EventCategory C>
-	constexpr EventCategory buildEventCategoryMask() {
-		return C;
-	}
-	template <EventCategory F, EventCategory S, EventCategory... N>
-	constexpr EventCategory buildEventCategoryMask() {
-		return static_cast<EventCategory>(
-			static_cast<int>(F) |
-			static_cast<int>(buildEventCategoryMask<S, N...>()));
-	}
 	constexpr bool checkCategory(EventCategory mask, EventCategory cat) {
 		return static_cast<int>(mask) & static_cast<int>(cat);
 	}
 
 #define ET_EVENT_CATEGORY_MASK(...)                                            \
-	EngineThingy::buildEventCategoryMask<__VA_ARGS__>()
+	EngineThingy::BinaryOr<EventCategory>(__VA_ARGS__)
 
 	namespace _impl {
 		template <class T, class = void>

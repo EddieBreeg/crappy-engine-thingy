@@ -15,20 +15,20 @@
 #if defined(ET_BUILD)
 
 #ifdef _MSC_VER
-#define ET_API __declspec(dllexport)
+#define ET_API	   __declspec(dllexport)
 #define CLIENT_API __declspec(dllimport)
 #else
-#define ET_API __attribute__((dllexport))
+#define ET_API	   __attribute__((dllexport))
 #define CLIENT_API __attribute__((dllimport))
 #endif
 
 #else
 
 #ifdef _MSC_VER
-#define ET_API __declspec(dllimport)
+#define ET_API	   __declspec(dllimport)
 #define CLIENT_API __declspec(dllexport)
 #else
-#define ET_API __attribute__((dllimport))
+#define ET_API	   __attribute__((dllimport))
 #define CLIENT_API __attribute__((dllexport))
 #endif
 
@@ -57,7 +57,7 @@ namespace EngineThingy {
 
 #define LSHIFT(x, k) ((x) << (k))
 #define RSHIFT(x, k) ((x) >> (k))
-#define BIT(n) LSHIFT(1, n)
+#define BIT(n)		 LSHIFT(1, n)
 
 #ifdef ET_DEBUG
 namespace EngineThingy {
@@ -87,3 +87,22 @@ template <class T>
 using heap_ptr = T *;
 
 void ET_API debug_break(void);
+
+namespace EngineThingy {
+	using LayerMask = uint32_t;
+
+	constexpr static inline LayerMask MakeLayerMask(uint32_t index) {
+		return BIT(index);
+	}
+	template <class... Ints>
+	constexpr static inline LayerMask MakeLayerMask(uint32_t x, uint32_t y,
+													Ints... others) {
+		static_assert(std::conjunction_v<std::is_unsigned<Ints>...>,
+					  "Layer indices must be unsigned");
+		return BIT(LayerMask(x)) | MakeLayerMask(y, others...);
+	}
+
+#define LAYERS_NONE LayerMask(0)
+#define LAYERS_ALL	LayerMask(-1)
+
+} // namespace EngineThingy

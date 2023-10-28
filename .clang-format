@@ -18,3 +18,7 @@ KeepEmptyLinesAtTheStartOfBlocks: false
 AlwaysBreakTemplateDeclarations: true
 BreakAfterAttributes: Always
 SortIncludes: Never
+AlignConsecutiveMacros: 
+  Enabled: true
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: false

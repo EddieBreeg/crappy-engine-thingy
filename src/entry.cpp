@@ -46,12 +46,6 @@ namespace EngineThingy {
 #endif
 	}
 
-	// Application &Application::Init(AppArgs_t args) {
-	// 	ET_ASSERT(!_instance);
-	// 	auto *app = new Application(args);
-	// 	return *(_instance = std::unique_ptr<Application>(app));
-	// }
-
 	void Application::Run() {
 		WindowSystem::Instance().CreateWindow(1280, 720, "ET",
 											  WindowFlags::Resizable);

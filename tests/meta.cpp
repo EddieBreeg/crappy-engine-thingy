@@ -1,5 +1,6 @@
-#include <et/meta.hpp>
+#include <et/core.hpp>
 #include <et/logsystem.hpp>
+#include <et/events/event.hpp>
 
 class S {
 	static S *_instance;
@@ -76,4 +77,22 @@ int main(int argc, char const *argv[]) {
 	auto b = EngineThingy::Bind(dummy, std::ref(x));
 	assert(b() == 2);
 	assert(x == 2);
+
+	enum class EnumType : unsigned short {};
+	static_assert(
+		std::is_same_v<_impl::make_int<EnumType>::type, unsigned short>);
+	static_assert(std::is_same_v<int, _impl::make_int<int>::type>);
+	static_assert(std::is_same_v<unsigned, _impl::make_int<unsigned>::type>);
+
+	static_assert(EngineThingy::BinaryOr<int>(1, 2, 4) == 7);
+	static_assert(_impl::is_static_castable_to<char, int>::value);
+	static_assert(
+		_impl::is_static_castable_to<EngineThingy::EventType, int>::value);
+
+	static constexpr auto mask =
+		EngineThingy::BinaryOr<int>(EngineThingy::EventCategory::Application,
+									EngineThingy::EventCategory::Window);
+	static_assert(mask == 3);
+
+	static_assert(EngineThingy::MakeLayerMask(0U, 1U, 2U) == 7);
 }

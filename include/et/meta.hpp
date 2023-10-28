@@ -153,5 +153,61 @@ namespace EngineThingy {
 			return std::apply(f, a);
 		};
 	}
+	using LayerMask = uint32_t;
+	namespace _impl {
+
+		template <class T, class U, class = void>
+		struct is_static_castable_to : std::false_type {};
+		template <class T, class U>
+		struct is_static_castable_to<
+			T, U, std::void_t<decltype(static_cast<U>(std::declval<T>()))>>
+			: std::true_type {};
+
+		template <class T>
+		struct is_static_castable_to_integral
+			: std::disjunction<
+				  is_static_castable_to<std::remove_cv_t<T>, char>,
+				  is_static_castable_to<std::remove_cv_t<T>, short>,
+				  is_static_castable_to<std::remove_cv_t<T>, int>,
+				  is_static_castable_to<std::remove_cv_t<T>, long>,
+				  is_static_castable_to<std::remove_cv_t<T>, long long>,
+				  is_static_castable_to<std::remove_cv_t<T>, unsigned char>,
+				  is_static_castable_to<std::remove_cv_t<T>, unsigned short>,
+				  is_static_castable_to<std::remove_cv_t<T>, unsigned int>,
+				  is_static_castable_to<std::remove_cv_t<T>, unsigned long>,
+				  is_static_castable_to<std::remove_cv_t<T>,
+										unsigned long long>> {};
+
+		template <class T, class = void>
+		struct make_int;
+		template <class T>
+		struct make_int<T, std::enable_if_t<std::is_enum_v<T>>>
+			: type_identity<std::underlying_type_t<T>> {};
+
+		template <class T>
+		struct make_int<T, std::enable_if_t<std::is_integral_v<T>>>
+			: type_identity<T> {};
+		template <class T>
+		using make_int_t = typename make_int<T>::type;
+
+		template <class Res>
+		static constexpr Res BinaryOr() {
+			return static_cast<Res>(0);
+		}
+		template <class Res, class Int1, class... Ints>
+		static constexpr Res BinaryOr(Int1 first, Ints... others) {
+			using Int2 = make_int_t<Res>;
+			return static_cast<Res>(
+				first | static_cast<Int2>(BinaryOr<Res>(others...)));
+		}
+	} // namespace _impl
+	template <class Res, class... Ints>
+	static inline constexpr Res BinaryOr(Ints... values) {
+		static_assert(
+			std::conjunction_v<_impl::is_static_castable_to_integral<Ints>...>,
+			"Values must be castable to integrals");
+		return _impl::BinaryOr<Res>(
+			static_cast<_impl::make_int_t<Ints>>(values)...);
+	}
 
 } // namespace EngineThingy
