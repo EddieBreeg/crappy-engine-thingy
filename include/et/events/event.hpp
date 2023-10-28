@@ -100,18 +100,18 @@ namespace EngineThingy {
 
 	class ET_API EventDispatcher {
 		using TypeFuncPtr = EventType (*)();
-		using Callback	  = libstra::unique_function<void(const Event &)>;
+		using Callback	  = libstra::unique_function<bool(const Event &)>;
 
 	public:
 		template <class Evt, class F>
 		static EventDispatcher Create(F &&func, LayerMask targetLayers) {
 			Callback cbk = [f = std::forward<F>(func)](const Event &e) {
-				f((const Evt &)(e));
+				return f((const Evt &)(e));
 			};
 			return EventDispatcher(
 				std::move(cbk), []() { return Evt::type; }, targetLayers);
 		}
-		void operator()(const Event &evt);
+		bool operator()(const Event &evt);
 		[[nodiscard]]
 		EventType GetEventType() const noexcept {
 			return _getType();

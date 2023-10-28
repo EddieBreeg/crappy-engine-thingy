@@ -13,7 +13,11 @@ int main() {
 	static_assert(is_event_v<AppQuit>);
 	int x			   = 0;
 	EventDispatcher el = EventDispatcher::Create<AppQuit>(
-		[&x](const AppQuit &) { ++x; }, LAYERS_ALL);
+		[&x](const AppQuit &) {
+			++x;
+			return true;
+		},
+		LAYERS_ALL);
 	AppQuit q;
 	el(q);
 	assert(x == 1);

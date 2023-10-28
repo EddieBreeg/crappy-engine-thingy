@@ -6,8 +6,8 @@ namespace EngineThingy {
 									 LayerMask l) :
 		_callback(std::move(cbk)), _getType(ptr), _targetLayers(l) {}
 
-	void EventDispatcher::operator()(const Event &evt) {
+	bool EventDispatcher::operator()(const Event &evt) {
 		ET_ASSERT(evt.GetType() == _getType());
-		_callback(evt);
+		return _callback(evt);
 	}
 } // namespace EngineThingy

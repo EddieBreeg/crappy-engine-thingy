@@ -18,7 +18,10 @@ namespace EngineThingy {
 
 			size_t i = static_cast<size_t>(e->GetType());
 			for (EventDispatcher &disp : _listeners[i]) {
-				if (disp.GetTargetLayers() & e->GetTargetLayers()) disp(*e);
+				if ((disp.GetTargetLayers() & e->GetTargetLayers()) &&
+					disp(*e)) {
+					break;
+				}
 			}
 		}
 	}
