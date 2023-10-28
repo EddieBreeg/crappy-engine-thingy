@@ -134,8 +134,9 @@ namespace EngineThingy {
 		bool _repeat;
 
 	public:
-		KeyPressedEvent(KeyCode code, bool repeat = false) noexcept :
-			_code(code), _repeat(repeat) {}
+		KeyPressedEvent(KeyCode code, bool repeat = false,
+						LayerMask m = LAYERS_ALL) noexcept :
+			Event(m), _code(code), _repeat(repeat) {}
 		[[nodiscard]]
 		bool IsRepeat() const noexcept {
 			return _repeat;
@@ -154,7 +155,8 @@ namespace EngineThingy {
 		KeyCode _code;
 
 	public:
-		KeyReleasedEvent(KeyCode code) noexcept : _code(code) {}
+		KeyReleasedEvent(KeyCode code, LayerMask m = LAYERS_ALL) noexcept :
+			Event(m), _code(code) {}
 		[[nodiscard]]
 		KeyCode GetCode() const noexcept {
 			return _code;

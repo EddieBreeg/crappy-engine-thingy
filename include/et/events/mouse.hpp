@@ -17,7 +17,8 @@ namespace EngineThingy {
 	class ET_API MouseButtonPressedEvent : public Event {
 	public:
 		MouseButton code;
-		MouseButtonPressedEvent(MouseButton b) : code(b) {}
+		MouseButtonPressedEvent(MouseButton b, LayerMask m = LAYERS_ALL) :
+			Event(m), code(b) {}
 		ET_EVENT_CLASS(EventType::MouseButtonPress,
 					   ET_EVENT_CATEGORY_MASK(EventCategory::Input,
 											  EventCategory::Mouse))
@@ -25,7 +26,8 @@ namespace EngineThingy {
 	class ET_API MouseButtonReleasedEvent : public Event {
 	public:
 		MouseButton code;
-		MouseButtonReleasedEvent(MouseButton b) : code(b) {}
+		MouseButtonReleasedEvent(MouseButton b, LayerMask m = LAYERS_ALL) :
+			Event(m), code(b) {}
 		ET_EVENT_CLASS(EventType::MouseButtonRelease,
 					   ET_EVENT_CATEGORY_MASK(EventCategory::Input,
 											  EventCategory::Mouse))
@@ -35,8 +37,9 @@ namespace EngineThingy {
 	public:
 		std::pair<double, double> oldPos, newPos;
 		CursorMoveEvent(std::pair<double, double> oldP,
-						std::pair<double, double> newP) :
-			oldPos(oldP), newPos(newP) {}
+						std::pair<double, double> newP,
+						LayerMask m = LAYERS_ALL) :
+			Event(m), oldPos(oldP), newPos(newP) {}
 		ET_EVENT_CLASS(EventType::MouseMove,
 					   ET_EVENT_CATEGORY_MASK(EventCategory::Input,
 											  EventCategory::Mouse))

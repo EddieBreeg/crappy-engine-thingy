@@ -18,7 +18,7 @@ namespace EngineThingy {
 
 			size_t i = static_cast<size_t>(e->GetType());
 			for (EventDispatcher &disp : _listeners[i]) {
-				disp(*e);
+				if (disp.GetTargetLayers() & e->GetTargetLayers()) disp(*e);
 			}
 		}
 	}

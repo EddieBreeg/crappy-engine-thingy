@@ -14,7 +14,7 @@ namespace EngineThingy {
 	protected:
 		libstra::array_view<const char *> _args;
 		Application(libstra::array_view<const char *> args);
-		// static void SetInstance(std::unique_ptr<Application> app);
+		virtual void OnStart() {}
 
 	private:
 		std::vector<SystemInstance> _systems;

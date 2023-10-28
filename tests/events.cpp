@@ -11,9 +11,9 @@ public:
 int main() {
 	using namespace EngineThingy;
 	static_assert(is_event_v<AppQuit>);
-	int x = 0;
-	EventDispatcher el =
-		EventDispatcher::Create<AppQuit>([&x](const AppQuit &) { ++x; });
+	int x			   = 0;
+	EventDispatcher el = EventDispatcher::Create<AppQuit>(
+		[&x](const AppQuit &) { ++x; }, LAYERS_ALL);
 	AppQuit q;
 	el(q);
 	assert(x == 1);

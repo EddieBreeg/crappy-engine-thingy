@@ -51,22 +51,8 @@ namespace EngineThingy {
 											  WindowFlags::Resizable);
 		LogSystem::Instance().SetLevel(spdlog::level::trace);
 		_startTime = Clock::now();
-		auto &eventSystem = EventSystem::Instance();
-		eventSystem.AddListener<ApplicationQuitEvent>(
-			[this](const ApplicationQuitEvent &) {
-				ET_CORE_LOG_INFO("Received application quit event");
-				this->Stop();
-			});
-		eventSystem.AddListener<WindowCloseEvent>(
-			[this](const WindowCloseEvent &) {
-				ET_CORE_LOG_INFO("Received window close event");
-				this->Stop();
-			});
-		eventSystem.AddListener<WindowFocusEvent>(
-			[](const WindowFocusEvent &evt) {
-				if (evt.focused) ET_CORE_LOG_TRACE("Window gained focus");
-				else ET_CORE_LOG_TRACE("Window lost focus");
-			});
+		OnStart();
+
 		TimePoint t;
 		Timing delta{ 0 };
 		while (_run) {

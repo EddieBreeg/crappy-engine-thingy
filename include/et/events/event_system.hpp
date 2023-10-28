@@ -18,10 +18,11 @@ namespace EngineThingy {
 		void Update(Timing delta);
 		static EventSystem &Init();
 		template <class E, class F>
-		void AddListener(F &&callback) {
+		void AddListener(F &&callback, LayerMask targetLayers = LAYERS_ALL) {
 			static_assert(is_event_v<E>, "Invalid event type");
 			_listeners[static_cast<size_t>(E::type)].emplace_back(
-				EventDispatcher::Create<E>(std::forward<F>(callback)));
+				EventDispatcher::Create<E>(std::forward<F>(callback),
+										   targetLayers));
 		}
 		void EnqueueEvent(EventReference e);
 		~EventSystem();
