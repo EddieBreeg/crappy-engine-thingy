@@ -51,6 +51,12 @@ namespace EngineThingy {
 											  WindowFlags::Resizable);
 		LogSystem::Instance().SetLevel(spdlog::level::trace);
 		_startTime = Clock::now();
+		EventSystem::Instance().AddListener<ApplicationQuitEvent>(
+			[this](const ApplicationQuitEvent &) {
+				ET_CORE_LOG_INFO("ApplicationQuit event received");
+				this->Stop();
+				return true;
+			});
 		OnStart();
 
 		TimePoint t;

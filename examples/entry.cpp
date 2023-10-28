@@ -6,12 +6,6 @@ private:
 		EngineThingy::Application(args) {}
 	void OnStart() override {
 		auto &eventSystem = EngineThingy::EventSystem::Instance();
-		eventSystem.AddListener<EngineThingy::ApplicationQuitEvent>(
-			[this](const EngineThingy::ApplicationQuitEvent &) {
-				ET_LOG_INFO("Received application quit event");
-				this->Stop();
-				return true;
-			});
 		eventSystem.AddListener<EngineThingy::WindowCloseEvent>(
 			[this](const EngineThingy::WindowCloseEvent &) {
 				ET_LOG_INFO("Received window close event");
