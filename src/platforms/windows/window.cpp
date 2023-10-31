@@ -1,4 +1,5 @@
 #include <et/window_system.hpp>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <et/platforms/windows/window.h>
 #include <et/events/window.hpp>
@@ -85,6 +86,11 @@ namespace EngineThingy {
 									: NULL,
 								NULL);
 		ET_ASSERT(_win);
+		glfwMakeContextCurrent(_win);
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		ET_ASSERT(status);
+		ET_CORE_LOG_INFO("Initialized OpenGL");
+
 		glfwGetCursorPos(_win, &_mousePos.first, &_mousePos.second);
 		glfwSetWindowUserPointer(_win, this);
 		glfwSetWindowSizeCallback(_win, sizeCallback);

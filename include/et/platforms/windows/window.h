@@ -1,14 +1,13 @@
 #pragma once
 
 #include <et/core.hpp>
-#include <GLFW/glfw3.h>
 
 #ifdef ET_WINDOWS
 
 namespace EngineThingy {
 	class ET_API WindowImpl : public Window {
 	private:
-		GLFWwindow *_win = nullptr;
+		struct GLFWwindow *_win = nullptr;
 		static void sizeCallback(GLFWwindow *, int w, int h);
 		static void moveCallback(GLFWwindow *, int w, int h);
 		static void focusCallback(GLFWwindow *, int focused);
