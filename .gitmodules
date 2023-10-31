@@ -10,3 +10,6 @@
 [submodule "deps/cpptrace"]
 	path = deps/cpptrace
 	url = git@github.com:jeremy-rifkin/cpptrace.git
+[submodule "deps/glad"]
+	path = deps/glad
+	url = git@github.com:Dav1dde/glad.git
