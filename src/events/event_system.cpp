@@ -25,12 +25,7 @@ namespace EngineThingy {
 			}
 		}
 	}
-	EventSystem::EventSystem() : _mbr{ sizeof(EventDispatcher) * 256 } {
-		std::pmr::polymorphic_allocator<EventDispatcher> alloc(&_mbr);
-		for (size_t i = 0; i < _listeners.size(); i++) {
-			new (_listeners.data() + i) std::pmr::list<EventDispatcher>(alloc);
-		}
-	}
+	EventSystem::EventSystem() {}
 	EventSystem::~EventSystem() {}
 
 } // namespace EngineThingy

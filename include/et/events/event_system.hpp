@@ -10,10 +10,10 @@ namespace EngineThingy {
 	class ET_API EventSystem : public Singleton<std::unique_ptr<EventSystem>> {
 	private:
 		EventSystem();
-		std::array<std::pmr::list<EventDispatcher>,
+		std::array<std::list<EventDispatcher>,
 				   static_cast<size_t>(EventType::NEventTypes)>
 			_listeners;
-		std::pmr::monotonic_buffer_resource _mbr;
+		// std::pmr::monotonic_buffer_resource _mbr;
 		std::queue<EventReference> _pendingEvents;
 
 	public:

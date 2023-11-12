@@ -1,6 +1,6 @@
 #include <et/window_system.hpp>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+
+#include <d3d11.h>
 #include <et/platforms/windows/window.h>
 #include <et/events/window.hpp>
 #include <et/events/keyboard.hpp>
@@ -10,112 +10,89 @@
 
 namespace EngineThingy {
 
-	void WindowImpl::sizeCallback(GLFWwindow *ptr, int w, int h) {
-		auto *win =
-			reinterpret_cast<WindowImpl *>(glfwGetWindowUserPointer(ptr));
-		win->OnResize(w, h);
-	}
-	void WindowImpl::moveCallback(GLFWwindow *ptr, int x, int y) {
-		auto *win =
-			reinterpret_cast<WindowImpl *>(glfwGetWindowUserPointer(ptr));
-		win->OnMove(x, y);
-	}
-	void WindowImpl::focusCallback(GLFWwindow *ptr, int f) {
-		auto *win =
-			reinterpret_cast<WindowImpl *>(glfwGetWindowUserPointer(ptr));
-		win->OnFocusChange(f);
-	}
-	void WindowImpl::mouseButtonCallback(GLFWwindow *ptr, int btn, int action,
-										 int mods) {
-		auto *win =
-			reinterpret_cast<WindowImpl *>(glfwGetWindowUserPointer(ptr));
-		switch (action) {
-		case GLFW_PRESS:
-			win->OnMouseButtonPress((MouseButton)btn);
+	WindowSystem::WindowSystem() {}
+
+	WindowSystem::~WindowSystem() {}
+
+	LRESULT WindowImpl::proc(HWND native, unsigned msg, WPARAM wp, LPARAM lp) {
+		WindowImpl *win =
+			reinterpret_cast<WindowImpl *>(GetWindowLongPtr(native, -21));
+		switch (msg) {
+		case WM_CLOSE:
+			EventSystem::Instance().EnqueueEvent(
+				EventReference(new WindowCloseEvent{}));
 			break;
-		case GLFW_RELEASE:
-			win->OnMouseButtonRelease((MouseButton)btn);
+		case WM_SIZE:
+			switch (wp) {
+			case SIZE_RESTORED:
+				win->OnResize(LOWORD(lp), HIWORD(lp));
+				break;
+			case SIZE_MINIMIZED:
+				break;
+			case SIZE_MAXIMIZED:
+				break;
+			default:
+				break;
+			}
 			break;
-		default:
-			ET_ASSERT(0);
+		case WM_SETFOCUS:
+			win->OnFocusChange(true);
+			break;
+		case WM_KILLFOCUS:
+			win->OnFocusChange(false);
+			break;
+		case WM_MOVE:
+			win->OnMove(LOWORD(lp), HIWORD(lp));
+			break;
+		case WM_MOUSEMOVE: {
+			int x = LOWORD(lp), y = HIWORD(lp);
+			win->OnMouseMove(x, y);
 			break;
 		}
-	}
-
-	void WindowImpl::keyCallback(GLFWwindow *ptr, int k, int, int action,
-								 int mods) {
-		auto *win =
-			reinterpret_cast<WindowImpl *>(glfwGetWindowUserPointer(ptr));
-		switch (action) {
-		case GLFW_PRESS:
-			win->OnKeyPress(static_cast<KeyCode>(k), false);
-			break;
-		case GLFW_REPEAT:
-			win->OnKeyPress(static_cast<KeyCode>(k), true);
-			break;
-		case GLFW_RELEASE:
-			win->OnKeyRelease(static_cast<KeyCode>(k));
-			break;
 		default:
-			ET_ASSERT(0);
 			break;
 		}
-	}
-	void WindowImpl::mouseMoveCallback(GLFWwindow *ptr, double x, double y) {
-		auto *win =
-			reinterpret_cast<WindowImpl *>(glfwGetWindowUserPointer(ptr));
-		win->OnMouseMove(x, y);
+		return DefWindowProc(native, msg, wp, lp);
 	}
 
-	WindowSystem::WindowSystem() {
-		int success = glfwInit();
-		ET_ASSERT(success);
-	}
-	WindowSystem::~WindowSystem() {
-		glfwTerminate();
-	}
 	WindowImpl::WindowImpl(uint32_t width, uint32_t height,
 						   const std::string &title, WindowFlags flags) :
 		Window(width, height, title) {
-		glfwWindowHint(GLFW_RESIZABLE,
-					   CheckWindowFlag(flags, WindowFlags::Resizable));
+		WNDCLASS wc		 = {};
+		wc.lpszClassName = "Win32Window";
+		wc.hInstance	 = GetModuleHandle(NULL);
+		wc.lpfnWndProc	 = proc;
+		RegisterClass(&wc);
 
-		_win = glfwCreateWindow(width, height, title.data(),
-								CheckWindowFlag(flags, WindowFlags::Fullscreen)
-									? glfwGetPrimaryMonitor()
-									: NULL,
-								NULL);
+		DWORD style = WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME;
+		if (CheckWindowFlag(flags, WindowFlags::Resizable)) style |= WS_SIZEBOX;
+
+		_win = CreateWindowExA(0, wc.lpszClassName, title.c_str(), style,
+							   CW_USEDEFAULT, CW_USEDEFAULT, width, height,
+							   NULL, NULL, wc.hInstance, NULL);
 		ET_ASSERT(_win);
-		glfwMakeContextCurrent(_win);
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		ET_ASSERT(status);
-		ET_CORE_LOG_INFO("Initialized OpenGL");
-
-		glfwGetCursorPos(_win, &_mousePos.first, &_mousePos.second);
-		glfwSetWindowUserPointer(_win, this);
-		glfwSetWindowSizeCallback(_win, sizeCallback);
-		glfwSetWindowFocusCallback(_win, focusCallback);
-		glfwSetWindowPosCallback(_win, moveCallback);
-		glfwSetMouseButtonCallback(_win, mouseButtonCallback);
-		glfwSetCursorPosCallback(_win, mouseMoveCallback);
-		glfwSetKeyCallback(_win, keyCallback);
+		SetWindowLongPtr(_win, -21, LONG_PTR(this));
+		ShowWindow(_win, 1);
+		RECT r;
+		GetWindowRect(_win, &r);
+		POINT curPos;
+		GetCursorPos(&curPos);
+		_mousePos = {
+			curPos.x - r.left,
+			curPos.y - r.top,
+		};
 	}
 
-	WindowImpl::~WindowImpl() {
-		glfwDestroyWindow(_win);
-	}
+	WindowImpl::~WindowImpl() {}
 
 	void WindowImpl::Update(Timing) {
-		glfwPollEvents();
-		if (glfwWindowShouldClose(_win)) {
-			EventSystem::Instance().EnqueueEvent(
-				std::make_unique<WindowCloseEvent>());
+		MSG m;
+		while (PeekMessageW(&m, _win, 0, 0, PM_REMOVE)) {
+			TranslateMessage(&m);
+			DispatchMessage(&m);
 		}
-		glfwSwapBuffers(_win);
 	}
-	void WindowImpl::SetVsync(bool VSync) {
-		glfwSwapInterval(VSync);
-	}
+	void WindowImpl::SetVsync(bool VSync) {}
 	void WindowImpl::SetResizeable(bool r) {}
 
 	std::unique_ptr<Window>
